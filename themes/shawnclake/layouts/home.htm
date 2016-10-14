@@ -1,0 +1,149 @@
+description = "The home layout"
+
+[session]
+security = "all"
+
+[usergroups]
+==
+<?php
+function onStart()
+{
+//$type = "user.delete";
+//$source = "testing page";
+//$data = ["dog" => "cat", "username" => "george"];
+//Event::fire('look.auditmanager.audit', [$type, $source, $data]);
+//Event::fire('look.notificationmanager.trigger', ["dev.test", "2", "3", "LobsterCake"]);
+//echo Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->IsInGroup("aDMins");
+$this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->Get();
+}
+?>
+==
+<!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="{{ 'assets/css/materialize.min.css'|theme }}"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+        <style>
+            body {
+                background-color: #e8f5e9;
+            }
+        </style>
+        
+        <!--<div class="container">
+        {% component 'session' %}
+      </div>-->
+      <header class="">
+      
+      <!-- Dropdown Structure -->
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!">Coming Soon!</a></li>
+  <!--<li><a href="#!">two</a></li>
+  <li class="divider"></li>
+  <li><a href="#!">three</a></li>-->
+</ul>
+      
+        <nav class="green lighten-1">
+        <div class="container">
+    <div class="nav-wrapper">
+       <a href="{{ 'index'|page }}" class="brand-logo">Shawn Clake</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+              <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Projects<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li><a href="https://github.com/ShawnClake">Github</a></li>
+            <li><a href="{{ 'dev'|page }}">Dev</a></li>  
+            {% if user %}<li><a data-request="onLogout" data-request-data="redirect: '/'">Logout</a></li>{% endif %}
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+              
+            <li><a href="https://github.com/ShawnClake">Github</a></li>
+            <li><a href="{{ 'dev'|page }}">Dev</a></li>  
+            {% if user %}<li><a data-request="onLogout" data-request-data="redirect: '/'">Logout</a></li>{% endif %}
+      </ul>
+    </div>
+    </div>
+  </nav>
+
+  <!--<nav class="green lighten-1">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="http://shawnclake.com" class="brand-logo">Shawn Clake</a>
+        <ul class="right side-nav" id="nav-mobile">
+          <li class="hide-on-small-only"><a href="#"><i class="mdi-navigation-arrow-back"></i></a></li>
+        </ul>
+        <a class="button-collapse" href="#" data-activates='nav-mobile'><i class="mdi-navigation-menu"></i></a>
+      
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                
+                <li><a href="https://github.com/ShawnClake">Github</a></li>
+                <li><a href="http://shawnclake.com/dev">Dev</a></li>  
+                {% if user %}<li><a data-request="onLogout" data-request-data="redirect: '/'">Logout</a></li>{% endif %}
+                
+            </ul>
+      </div>
+    </div>
+  </nav>-->
+</header>
+
+      
+    {% page %}
+    
+    <footer class="page-footer green lighten-1" style="margin:0;">
+      <div class="container">
+        <div class="row">
+          <div class="col l4 s12">
+            <h5 class="white-text">Contact Shawn</h5>
+            <p class="grey-text text-lighten-4">To contact me, please send me an email at <a href="mailto:shawn.clake@gmail.com?Subject=Inquiry" target="_top">shawn.clake@gmail.com</a></p>
+          </div>
+          <div class="col l4 s12">
+            <h5 class="white-text">Links</h5>
+            <!--<p class="grey-text text-lighten-4">Check out my Github</p>-->
+            <a class="btn waves-effect waves-light green lighten-3" target="_blank" href="https://github.com/ShawnClake">Github</a>
+          </div>
+          <div class="col l4 s12" style="overflow: hidden;">
+            <!--<h5 class="white-text">Connect</h5>
+            <iframe src="http://ghbtns.com/github-btn.html?user=dogfalo&repo=materialize&type=watch&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+            <br>
+            <a href="https://twitter.com/MaterializeCSS" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @MaterializeCSS</a>
+            <br>
+            <div class="g-follow" data-annotation="bubble" data-height="24" data-href="https://plus.google.com/108619793845925798422" data-rel="publisher"></div>-->
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        © 2016 Shawn Clake, All rights reserved.
+        <a class="grey-text text-lighten-4 right" href="https://github.com/ShawnClake">GitHub</a>
+        </div>
+      </div>
+    </footer>
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="{{ 'assets/js/materialize.min.js'|theme }}"></script>
+      {% framework extras %} 
+      <script>
+          $(document).ready(function(){
+       $('.carousel.carousel-slider').carousel({full_width: true});
+    });
+        
+          $(document).ready(function(){
+      $('.parallax').parallax();
+      $(".button-collapse").sideNav();
+      $(".dropdown-button").dropdown();
+    });
+          $(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
+        
+      </script>
+    </body>
+  </html>

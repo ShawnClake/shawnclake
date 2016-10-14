@@ -1,0 +1,8 @@
+1.0.1: First version of UserExtended
+1.0.2:
+    - Seed in basic groups.
+    - seed_basic_user_groups.php
+1.0.3: nothing
+1.0.4:
+    - Create the table.
+    - create_friends_table.php

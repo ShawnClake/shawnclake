@@ -1,0 +1,126 @@
+title = "Dev"
+url = "/dev"
+layout = "home"
+description = "Dev page"
+is_hidden = 0
+
+[account]
+redirect = "dev"
+paramCode = "{{ code }}"
+
+[session]
+security = "all"
+redirect = "index"
+
+[usergroups]
+
+[friends]
+maxItems = 5
+==
+<?php
+function onStart()
+{
+//$type = "user.delete";
+//$source = "testing page";
+//$data = ["dog" => "cat", "username" => "george"];
+//Event::fire('look.auditmanager.audit', [$type, $source, $data]);
+//Event::fire('look.notificationmanager.trigger', ["dev.test", "2", "3", "LobsterCake"]);
+//echo Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->IsInGroup("debugger");
+//$this['debugger'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->IsInGroup("debugger");
+//$this['grouparr'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->Get();
+}
+?>
+==
+{% component 'session' %}
+
+<div class="row container" style="min-height:800px">
+        
+<div class="col s12 ">
+
+{% if user %}
+<div class="row" style="margin-top:25px;">
+<div class="col s2">
+    <a href="#">{{ user.name }}</a>
+</div>
+<div class="col s10 right-align">
+    <a data-request="onLogout" data-request-data="redirect: '/dev'">Logout</a>
+</div>
+</div>
+
+<!-- {{ user }} & { groups } --->
+
+{% if GROUPS.debugger %}
+<div class="row" style="margin-top:15px;">
+<div class="col s12 m10">
+<i>
+User Roles: 
+<ul style="display:inline; margin-left:5px;">
+    {% for role in groups %}
+        <li style="display: inline;">{{ role.name }}{% if not loop.last %},{% endif %}</li>
+    {% endfor %}
+   
+</ul>
+</i>
+</div>
+</div>
+{% endif %}
+
+
+{% if GROUPS.debugger %}
+<div class="row" style="margin-top:15px;">
+<div class="col s12 m10">
+<i>
+Friends:
+<ul style="display:inline; margin-left:5px;">
+    {% for friend in friends.friends %}
+        <li style="display: inline;">{{ friend.name }}{% if not loop.last %},{% endif %}</li>
+    {% endfor %}
+</ul>
+</i>
+</div>
+</div>
+{% endif %}
+
+ 
+{% if GROUPS.tester %}
+<br>I am a tester
+{% endif %}
+
+{% endif %}
+
+
+<div class="row" style="margin-top:55px;" >
+        
+<div class="col s12 m8 offset-m2">
+{% if not user %}
+
+    
+            <h3>Sign in</h3>
+            {% partial account ~ '::signin' %}
+
+
+{% else %}
+
+    <h5>Settings</h5>
+    <div style="margin-top:15px;">
+    {% partial account ~ '::activation_check' %}
+
+    {% partial account ~ '::update' %}
+
+    <br>
+
+    {% partial account ~ '::deactivate_link' %}
+    </div>
+    
+    
+
+{% endif %}
+<p></p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
