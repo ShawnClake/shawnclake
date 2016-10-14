@@ -41,137 +41,178 @@ function onStart()
 ==
 {% component 'session' %}
 
+<style>
+
+    div.userblock
+    {
+        color:#000;
+    }
+
+    div.userblock:hover
+    {
+
+        background-color:rgba(0,0,0,0.1);
+
+    }
+</style>
+
 <div class="row container" style="min-height:800px">
         
-<div class="col s12 ">
+    <div class="col s12 ">
 
-{% if user %}
-<div class="row" style="margin-top:25px;">
-<div class="col s2">
-    <a href="#">{{ user.name }}</a>
-</div>
-<div class="col s10 right-align">
-    <a data-request="onLogout" data-request-data="redirect: '/dev'">Logout</a>
-</div>
-</div>
+        {% if user %}
 
-<!-- {{ user }} & { groups } --->
+            <div class="row" style="margin-top:25px;">
+                <div class="col s2">
+                    <a href="#">{{ user.name }}</a>
+                </div>
+                <div class="col s10 right-align">
+                    <a data-request="onLogout" data-request-data="redirect: '/dev'">Logout</a>
+                </div>
+            </div>
 
-{% if GROUPS.debugger %}
-<div class="row" style="margin-top:15px;">
-<div class="col s12 m10">
-<i>
-User Roles: 
-<ul style="display:inline; margin-left:5px;">
-    {% for role in groups %}
-        <li style="display: inline;">{{ role.name }}{% if not loop.last %},{% endif %}</li>
-    {% endfor %}
-   
-</ul>
-</i>
-</div>
-</div>
-{% endif %}
+            <div class="row">
+                <div class="col s2">
 
 
-{% if GROUPS.debugger %}
-<div class="row" style="margin-top:15px;">
-<div class="col s12 m10">
-<i>
-Friends:
-<ul style="display:inline; margin-left:5px;">
-    {% for friend in friends.friends %}
-        <li style="display: inline;">{{ friend.name }}{% if not loop.last %},{% endif %}</li>
-    {% endfor %}
-</ul>
-</i>
-</div>
-</div>
-{% endif %}
+                    {% if GROUPS.debugger %}
+                        <h5>Debug</h5><hr>
+                    {% endif %}
+
+                    {% if GROUPS.debugger %}
+                        <div class="row" style="margin-top:15px;">
+                            <div class="col s12 m10">
+                                <i>
+                                    User Roles:
+                                    <ul style="display:inline; margin-left:5px;">
+                                        {% for role in groups %}
+                                        <li style="display: inline;">{{ role.name }}{% if not loop.last %},{% endif %}</li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </i>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if GROUPS.debugger %}
+                        <div class="row" style="margin-top:15px;">
+                            <div class="col s12 m10">
+                                <i>
+                                    RandomUsers:
+                                    <ul style="display:inline; margin-left:5px;">
+                                        {% for user in friends.listRandomUsers %}
+                                        <li style="display: inline;">{{ user.name }}{% if not loop.last %},{% endif %}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </i>
+                            </div>
+                        </div>
+                    {% endif %}
 
 
+                </div>
+                <div class="col s7">
 
-{% if GROUPS.debugger %}
-<div class="row" style="margin-top:15px;">
-<div class="col s12 m10">
-<i>
-RandomUsers:
-<ul style="display:inline; margin-left:5px;">
-    {% for user in friends.listRandomUsers %}
-        <li style="display: inline;">{{ user.name }}{% if not loop.last %},{% endif %}</li>
-    {% endfor %}
-</ul>
-</i>
-</div>
-</div>
-{% endif %}
+                    <h5>Settings</h5>
+                    <div style="margin-top:15px;">
+                        {% partial account ~ '::activation_check' %}
 
+                        {% partial account ~ '::update' %}
 
- 
-{% if GROUPS.tester %}
+                        <br>
 
-User List:
+                        {% partial account ~ '::deactivate_link' %}
+                    </div>
 
-<ul>
-    {% for user in userlist.userlist %}
-        <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">Add</button></li>
-    {% endfor %}
-</ul>
+                </div>
 
-{% endif %}
+                <div class="col s3">
 
 
+                    {% if GROUPS.tester %}
+                    <h5>Tests</h5><hr>
+                    {% endif %}
 
-{% if GROUPS.tester %}
+                    {% if GROUPS.tester %}
+                    <div class="row" style="margin-top:15px;">
+                        <div class="col s12 m10">
 
-Friend Requests:
+                            Friends: <br>
 
-<ul>
-    {% for user in friendrequests.friendrequests %}
-    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">Accept</button></li>
-    {% endfor %}
-</ul>
+                            {% for friend in friends.friends %}
 
-{% endif %}
+                                <div style="width:100%;min-height:50px;padding:5px;">
+                                    <span>{{friend.name}} {{friend.surname}}</span><br>
+                                    <span style="margin-left:7px;">Last Online: {{friend.last_seen}}</span><br>
+                                    <span style="margin-left:7px;font-style: italic;">{{friend.email}}</span><br>
+                                </div>
 
+                            {% endfor %}
 
+                        </div>
+                    </div>
+                    {% endif %}
 
+                    {% if GROUPS.tester %}
 
-{% endif %}
+                        Suggested for you: <i style="font-size:11px;"> (Click to add)</i>
 
+                        {% for user in userlist.userlist %}
 
-<div class="row" style="margin-top:55px;" >
-        
-<div class="col s12 m8 offset-m2">
-{% if not user %}
+                            <a href="#" style="text-decoration: none;" data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">
 
-    
-            <h3>Sign in</h3>
-            {% partial account ~ '::signin' %}
+                                <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
+                                    <span>{{user.name}}</span><br>
+                                    <span style="margin-left:7px;">Last Online: {{user.last_seen}}</span><br>
+                                </div>
 
+                            </a>
 
-{% else %}
+                        {% endfor %}
 
-    <h5>Settings</h5>
-    <div style="margin-top:15px;">
-    {% partial account ~ '::activation_check' %}
+                    {% endif %}
 
-    {% partial account ~ '::update' %}
+                    <br>
 
-    <br>
+                    {% if GROUPS.tester %}
 
-    {% partial account ~ '::deactivate_link' %}
+                        Friend Requests: <i style="font-size:11px;"> (Click to accept)</i>
+
+                        {% for user in friendrequests.friendrequests %}
+                            <a href="#" style="" data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">
+
+                                <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
+                                    <span>{{user.name}} {{user.surname}}</span><br>
+                                    <span style="margin-left:7px;">Last Online: {{user.last_seen}}</span><br>
+                                    <span style="margin-left:7px;font-style: italic;">{{user.email}}</span><br>
+                                </div>
+                            </a>
+                        {% endfor %}
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+        {% endif %}
+
+        <div class="row" style="margin-top:55px;" >
+
+            <div class="col s12 m8 offset-m2">
+                {% if not user %}
+
+                    <h3>Sign in</h3>
+                    {% partial account ~ '::signin' %}
+
+                {% endif %}
+
+            <p></p>
+
+            </div>
+
+        </div>
+
     </div>
-    
-    
-
-{% endif %}
-<p></p>
-
-</div>
-
-</div>
-
-</div>
 
 </div>
