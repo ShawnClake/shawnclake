@@ -16,6 +16,14 @@ redirect = "index"
 
 [friends]
 maxItems = 5
+
+[userlist]
+type = "random"
+maxItems = 5
+userID = 0
+
+[friendrequests]
+maxItems = 5
 ==
 <?php
 function onStart()
@@ -81,10 +89,53 @@ Friends:
 </div>
 {% endif %}
 
+
+
+{% if GROUPS.debugger %}
+<div class="row" style="margin-top:15px;">
+<div class="col s12 m10">
+<i>
+RandomUsers:
+<ul style="display:inline; margin-left:5px;">
+    {% for user in friends.listRandomUsers %}
+        <li style="display: inline;">{{ user.name }}{% if not loop.last %},{% endif %}</li>
+    {% endfor %}
+</ul>
+</i>
+</div>
+</div>
+{% endif %}
+
+
  
 {% if GROUPS.tester %}
-<br>I am a tester
+
+User List:
+
+<ul>
+    {% for user in userlist.userlist %}
+        <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">Add</button></li>
+    {% endfor %}
+</ul>
+
 {% endif %}
+
+
+
+{% if GROUPS.tester %}
+
+Friend Requests:
+
+<ul>
+    {% for user in friendrequests.friendrequests %}
+    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">Accept</button></li>
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+
+
 
 {% endif %}
 

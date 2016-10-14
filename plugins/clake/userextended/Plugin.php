@@ -56,6 +56,8 @@ class Plugin extends PluginBase
         return [
             'Clake\UserExtended\Components\UserGroups' => 'usergroups',
             'Clake\UserExtended\Components\ListFriends' => 'friends',
+            'Clake\UserExtended\Components\UserList' => 'userlist',
+            'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
         ];
     }
 
