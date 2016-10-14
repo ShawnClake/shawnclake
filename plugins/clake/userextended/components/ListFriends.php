@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Components;
 
 use Clake\UserExtended\Classes\FriendsManager;
+use Clake\UserExtended\Classes\UserManager;
 use Cms\Classes\ComponentBase;
 
 class ListFriends extends ComponentBase
@@ -39,7 +40,7 @@ class ListFriends extends ComponentBase
 
     public function listRandomUsers()
     {
-        return FriendsManager::getRandomUserSet(5);
+        return UserManager::getRandomUserSet(5);
     }
 
 }
