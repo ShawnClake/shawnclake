@@ -37,4 +37,9 @@ class ListFriends extends ComponentBase
 
     }
 
+    public function listRandomUsers()
+    {
+        return FriendsManager::getRandomUserSet(5);
+    }
+
 }
