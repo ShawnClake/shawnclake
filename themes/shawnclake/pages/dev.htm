@@ -16,6 +16,14 @@ redirect = "index"
 
 [friends]
 maxItems = 5
+
+[userlist]
+type = "random"
+maxItems = 5
+userID = 0
+
+[friendrequests]
+maxItems = 5
 ==
 <?php
 function onStart()
@@ -101,8 +109,33 @@ RandomUsers:
 
  
 {% if GROUPS.tester %}
-<br>I am a tester
+
+User List:
+
+<ul>
+    {% for user in userlist.userlist %}
+        <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">Add</button></li>
+    {% endfor %}
+</ul>
+
 {% endif %}
+
+
+
+{% if GROUPS.tester %}
+
+Friend Requests:
+
+<ul>
+    {% for user in friendrequests.friendrequests %}
+    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">Accept</button></li>
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+
+
 
 {% endif %}
 
