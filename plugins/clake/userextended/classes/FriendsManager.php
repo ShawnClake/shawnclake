@@ -10,6 +10,51 @@ use RainLab\User\Models\User;
 class FriendsManager
 {
 
+    public static function getRandomUserSet($limit = 5)
+    {
+
+        $users = new Collection;
+        $returner = new Collection;
+
+        $userCount = User::all()->count();
+
+        if($userCount < $limit)
+            $limit = $userCount;
+
+        $users = User::all()->random($limit);
+
+        $friends = self::getAll();
+
+        foreach($users as $user)
+        {
+
+            $userAdd = true;
+
+            foreach($friends as $friend)
+            {
+
+                if($user->id == $friend->id)
+                {
+                    $userAdd = false;
+                    break;
+                }
+
+            }
+
+            if($user->id == self::getLoggedInUser()->id)
+                $userAdd = false;
+
+            if($userAdd)
+            {
+                $returner->push($user);
+            }
+
+        }
+
+        return $returner;
+
+    }
+
     public static function sendFriendRequest($friendUserID)
     {
 
@@ -148,6 +193,45 @@ class FriendsManager
 
         return $users;
 
+    }
+
+    public static function getAll()
+    {
+        $userid = self::getLoggedInUser()->id;
+
+        $usersa = new Collection;
+
+        $usersb = new Collection;
+
+        $friendsa = Friends::where('user_that_sent_request', $userid)->where('accepted', '1')->get();
+
+        //$friendsa = $friendsa->keyBy('user_that_accepted_request');
+
+        //$friendsa = $friendsa->keyBy(function($item) { return "U" . $item['user_that_accepted_request']; });
+
+        foreach ($friendsa as $result) {
+
+            $u = User::where('id', $result['user_that_accepted_request'])->get();
+            $usersa->push($u[0]);
+
+        }
+
+        $friendsb = Friends::where('user_that_accepted_request', $userid)->where('accepted', '1')->get();
+
+        //$friendsb = $friendsb->keyBy('user_that_sent_request');
+
+        //$friendsb = $friendsb->keyBy(function($item) { return "U" . $item['user_that_sent_request']; });
+
+        foreach ($friendsb as $result) {
+
+            $u = User::where('id', $result['user_that_sent_request'])->get();
+            $usersb->push($u[0]);
+
+        }
+
+        $users = $usersa->merge($usersb);
+
+        return $users;
     }
 
     private static function getLoggedInUser()
