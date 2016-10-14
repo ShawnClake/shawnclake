@@ -10,59 +10,45 @@ use RainLab\User\Models\User;
 class FriendsManager
 {
 
-    public static function getRandomUserSet($limit = 5)
+
+    public static function listMyReceivedFriendRequests($userid = null, $limit = 5)
     {
 
-        $users = new Collection;
-        $returner = new Collection;
+        $users = new Collection();
 
-        $userCount = User::all()->count();
+        if($userid == null)
+            $userid = self::getLoggedInUser()->id;
 
-        if($userCount < $limit)
-            $limit = $userCount;
+        $requests = Friends::where('user_that_accepted_request', $userid)->where('accepted', 0)->take($limit)->get();
 
-        $users = User::all()->random($limit);
+        foreach ($requests as $request) {
 
-        $friends = self::getAll();
-
-        foreach($users as $user)
-        {
-
-            $userAdd = true;
-
-            foreach($friends as $friend)
-            {
-
-                if($user->id == $friend->id)
-                {
-                    $userAdd = false;
-                    break;
-                }
-
-            }
-
-            if($user->id == self::getLoggedInUser()->id)
-                $userAdd = false;
-
-            if($userAdd)
-            {
-                $returner->push($user);
-            }
+            $u = User::where('id', $request['user_that_sent_request'])->get();
+            $users->push($u[0]);
 
         }
 
-        return $returner;
+        return $users;
 
     }
 
     public static function sendFriendRequest($friendUserID)
     {
 
+        $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->count();
+
+        $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->count();
+
+        if($exists > 0 || $exists2 > 0)
+            return;
+
         $request = new Friends;
 
         $request->user_that_sent_request = self::getLoggedInUser()->id;
 
         $request->user_that_accepted_request = $friendUserID;
+
+        $request->accepted = 0;
 
         $request->save();
 
@@ -94,12 +80,13 @@ class FriendsManager
         if($userID2 == null)
             $userID2 = self::getLoggedInUser()->id;
 
-        $friends = Friends::where('user_that_sent_request', $userID2)->where('user_that_accepted_request', $userID1)->where('accepted', '0')->count();
+        $friends = Friends::where('user_that_sent_request', $userID1)->where('user_that_accepted_request', $userID2)->where('accepted', '0')->count();
 
         if($friends == 1)
         {
 
-            $request = Friends::where('user_that_sent_request', $userID2)->where('user_that_accepted_request', $userID1)->where('accepted', '0')->get();
+            $request = Friends::where('user_that_sent_request', $userID1)->where('user_that_accepted_request', $userID2)->where('accepted', '0')->get();
+            $request = $request[0];
             $request->accepted = 1;
             $request->save();
 
