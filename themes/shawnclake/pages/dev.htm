@@ -81,6 +81,24 @@ Friends:
 </div>
 {% endif %}
 
+
+
+{% if GROUPS.debugger %}
+<div class="row" style="margin-top:15px;">
+<div class="col s12 m10">
+<i>
+RandomUsers:
+<ul style="display:inline; margin-left:5px;">
+    {% for user in friends.listRandomUsers %}
+        <li style="display: inline;">{{ user.name }}{% if not loop.last %},{% endif %}</li>
+    {% endfor %}
+</ul>
+</i>
+</div>
+</div>
+{% endif %}
+
+
  
 {% if GROUPS.tester %}
 <br>I am a tester
