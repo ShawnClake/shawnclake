@@ -1,7 +1,10 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Broadcasts\TestUserAdded;
 use Clake\UserExtended\Classes\FriendsManager;
+use Clake\UserExtended\Classes\UserUtil;
 use Cms\Classes\ComponentBase;
+use Pusher;
 
 class ListFriendRequests extends ComponentBase
 {
@@ -29,6 +32,11 @@ class ListFriendRequests extends ComponentBase
     }
 
 
+    /**
+     * Returns a list of users who have requested you to be their friend
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function friendrequests()
     {
         $limit = $this->property('maxItems');
@@ -36,11 +44,32 @@ class ListFriendRequests extends ComponentBase
         return FriendsManager::listMyReceivedFriendRequests(null, $limit);
     }
 
+    /**
+     * AJAX call when a button is clicked to accept a friend request
+     */
     public function onAccept()
     {
         $userid = post('id');
 
-        FriendsManager::acceptRequest($userid);
+        if($userid != null)
+            FriendsManager::acceptRequest($userid);
+
+        //event(new TestUserAdded());
+
+        $options = array(
+            'encrypted' => true
+        );
+        $pusher = new Pusher(
+            '41637aa0aba7a37edcb1',
+            '42fc6a49f2f1ea20197b',
+            '259549',
+            $options
+        );
+
+        //$data['message'] = 'hello world';
+        $data = UserUtil::getLoggedInUser()->toArray();
+        $pusher->trigger('useradded', 'hi', $data);
+
 
     }
 
