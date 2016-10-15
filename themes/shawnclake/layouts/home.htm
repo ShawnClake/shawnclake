@@ -127,6 +127,8 @@ $this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->Al
       <!--Import jQuery before materialize.js-->
       <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
       <script type="text/javascript" src="{{ 'assets/js/materialize.min.js'|theme }}"></script>
+      <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
+      <script type="text/javascript" src="{{ 'assets/js/pusherintegration.js'|theme }}"></script>
       {% framework extras %} 
       <script>
           $(document).ready(function(){
@@ -143,6 +145,9 @@ $this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->Al
       accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
     });
   });
+
+
+
         
       </script>
     </body>
