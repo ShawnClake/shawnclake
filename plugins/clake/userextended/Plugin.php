@@ -8,7 +8,10 @@ use System\Classes\PluginBase;
  */
 class Plugin extends PluginBase
 {
-//test
+
+
+    //public $require = ['rainlab.user'];
+
     /**
      * Returns information about this plugin.
      *
