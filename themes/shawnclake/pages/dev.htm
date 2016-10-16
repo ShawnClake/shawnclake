@@ -24,6 +24,8 @@ userID = 0
 
 [friendrequests]
 maxItems = 5
+
+[dungeonList]
 ==
 <?php
 function onStart()
@@ -109,6 +111,26 @@ function onStart()
                             </div>
                         </div>
                     {% endif %}
+                    
+                    
+                    {% if GROUPS.debugger %}
+                        <div class="row" style="margin-top:15px;">
+                            <div class="col s12 m10">
+                                <i>
+                                    Dungeons:
+                                    {% for dungeon in dungeonList.dungeons %}
+                                        <a href="/dungeons/{{dungeon.slug}}">
+
+                                            <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
+                                                <span>{{dungeon.name}}</span><br>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </i>
+                            </div>
+                        </div>
+                    {% endif %}
+
 
 
                 </div>

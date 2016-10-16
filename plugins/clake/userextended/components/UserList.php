@@ -59,6 +59,9 @@ class UserList extends ComponentBase
 
     }
 
+    /**
+     * AJAX call for when someone wants to send a friend request
+     */
     public function onFriendUser()
     {
 

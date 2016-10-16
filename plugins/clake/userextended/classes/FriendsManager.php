@@ -10,7 +10,13 @@ use RainLab\User\Models\User;
 class FriendsManager
 {
 
-
+    /**
+     * Returns a list of friend requests received.
+     *
+     * @param null $userid
+     * @param int $limit
+     * @return Collection
+     */
     public static function listMyReceivedFriendRequests($userid = null, $limit = 5)
     {
 
@@ -32,6 +38,11 @@ class FriendsManager
 
     }
 
+    /**
+     * Sends a friend request
+     *
+     * @param $friendUserID
+     */
     public static function sendFriendRequest($friendUserID)
     {
 
@@ -54,6 +65,13 @@ class FriendsManager
 
     }
 
+    /**
+     * Returns whether or not a user is our friend
+     *
+     * @param $userID1
+     * @param null $userID2
+     * @return bool
+     */
     public static function isFriend($userID1, $userID2 = null)
     {
 
@@ -74,6 +92,12 @@ class FriendsManager
 
     }
 
+    /**
+     * Accepts a friend request from a user
+     *
+     * @param $userID1
+     * @param null $userID2
+     */
     public static function acceptRequest($userID1, $userID2 = null)
     {
 
@@ -94,6 +118,12 @@ class FriendsManager
 
     }
 
+    /**
+     * Lists friend requests both received and sent
+     *
+     * @param int $limit
+     * @return static
+     */
     public static function listRequests($limit = 100)
     {
         $userid = self::getLoggedInUser()->id;
@@ -137,6 +167,12 @@ class FriendsManager
         return $users;
     }
 
+    /**
+     * Returns a list of friends with a limit
+     *
+     * @param $limit
+     * @return static
+     */
     public static function listFriends($limit)
     {
 
@@ -182,6 +218,11 @@ class FriendsManager
 
     }
 
+    /**
+     * Returns all friends
+     *
+     * @return Collection
+     */
     public static function getAll()
     {
         $userid = self::getLoggedInUser()->id;
@@ -221,6 +262,11 @@ class FriendsManager
         return $users;
     }
 
+    /**
+     * Returns the logged in user model
+     *
+     * @return User
+     */
     private static function getLoggedInUser()
     {
         if (!$user = Auth::getUser()) {

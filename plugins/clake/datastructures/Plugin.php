@@ -1,16 +1,13 @@
-<?php namespace Clake\UserExtended;
+<?php namespace Clake\DataStructures;
 
 use Backend;
 use System\Classes\PluginBase;
 
 /**
- * UserExtended Plugin Information File
+ * DataStructures Plugin Information File
  */
 class Plugin extends PluginBase
 {
-
-
-    public $require = ['RainLab.User'];
 
     /**
      * Returns information about this plugin.
@@ -20,8 +17,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'UserExtended',
-            'description' => 'No description provided yet...',
+            'name'        => 'Data Structures',
+            'description' => 'Data structures and components which utilize them!',
             'author'      => 'clake',
             'icon'        => 'icon-leaf'
         ];
@@ -54,13 +51,10 @@ class Plugin extends PluginBase
      */
     public function registerComponents()
     {
-        //return []; // Remove this line to activate
+        return []; // Remove this line to activate
 
         return [
-            'Clake\UserExtended\Components\UserGroups' => 'usergroups',
-            'Clake\UserExtended\Components\ListFriends' => 'friends',
-            'Clake\UserExtended\Components\UserList' => 'userlist',
-            'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
+            'Clake\DataStructures\Components\MyComponent' => 'myComponent',
         ];
     }
 
@@ -74,8 +68,8 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'clake.userextended.some_permission' => [
-                'tab' => 'UserExtended',
+            'clake.datastructures.some_permission' => [
+                'tab' => 'DataStructures',
                 'label' => 'Some permission'
             ],
         ];
@@ -91,11 +85,11 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'userextended' => [
-                'label'       => 'UserExtended',
-                'url'         => Backend::url('clake/userextended/mycontroller'),
+            'datastructures' => [
+                'label'       => 'DataStructures',
+                'url'         => Backend::url('clake/datastructures/mycontroller'),
                 'icon'        => 'icon-leaf',
-                'permissions' => ['clake.userextended.*'],
+                'permissions' => ['clake.datastructures.*'],
                 'order'       => 500,
             ],
         ];

@@ -6,6 +6,8 @@ use RainLab\User\Models\User;
 
 class UserManager
 {
+
+
     public static function getRandomUserSet($limit = 5)
     {
 

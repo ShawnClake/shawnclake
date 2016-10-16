@@ -1,16 +1,13 @@
-<?php namespace Clake\UserExtended;
+<?php namespace Clake\Pusher;
 
 use Backend;
 use System\Classes\PluginBase;
 
 /**
- * UserExtended Plugin Information File
+ * pusher Plugin Information File
  */
 class Plugin extends PluginBase
 {
-
-
-    public $require = ['RainLab.User'];
 
     /**
      * Returns information about this plugin.
@@ -20,8 +17,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'UserExtended',
-            'description' => 'No description provided yet...',
+            'name'        => 'Pusher',
+            'description' => 'Pusher plugin for OctoberCMS',
             'author'      => 'clake',
             'icon'        => 'icon-leaf'
         ];
@@ -57,10 +54,7 @@ class Plugin extends PluginBase
         //return []; // Remove this line to activate
 
         return [
-            'Clake\UserExtended\Components\UserGroups' => 'usergroups',
-            'Clake\UserExtended\Components\ListFriends' => 'friends',
-            'Clake\UserExtended\Components\UserList' => 'userlist',
-            'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
+            'Clake\Pusher\Components\AuthEndpoint' => 'authEndpoint',
         ];
     }
 
@@ -74,8 +68,8 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'clake.userextended.some_permission' => [
-                'tab' => 'UserExtended',
+            'clake.pusher.some_permission' => [
+                'tab' => 'pusher',
                 'label' => 'Some permission'
             ],
         ];
@@ -91,11 +85,11 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'userextended' => [
-                'label'       => 'UserExtended',
-                'url'         => Backend::url('clake/userextended/mycontroller'),
+            'pusher' => [
+                'label'       => 'pusher',
+                'url'         => Backend::url('clake/pusher/mycontroller'),
                 'icon'        => 'icon-leaf',
-                'permissions' => ['clake.userextended.*'],
+                'permissions' => ['clake.pusher.*'],
                 'order'       => 500,
             ],
         ];

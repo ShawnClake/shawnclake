@@ -10,8 +10,8 @@ class UserGroups extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'UserGroups Component',
-            'description' => 'No description provided yet...'
+            'name'        => 'UserGroups',
+            'description' => 'Used to return a list of UserGroups'
         ];
     }
 

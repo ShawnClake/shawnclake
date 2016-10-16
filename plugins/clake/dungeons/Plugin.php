@@ -1,14 +1,13 @@
-<?php namespace Clake\UserExtended;
+<?php namespace Clake\Dungeons;
 
 use Backend;
 use System\Classes\PluginBase;
 
 /**
- * UserExtended Plugin Information File
+ * dungeons Plugin Information File
  */
 class Plugin extends PluginBase
 {
-
 
     public $require = ['RainLab.User'];
 
@@ -20,8 +19,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'UserExtended',
-            'description' => 'No description provided yet...',
+            'name'        => 'Dungeons',
+            'description' => 'Dungeons and dragons',
             'author'      => 'clake',
             'icon'        => 'icon-leaf'
         ];
@@ -57,10 +56,8 @@ class Plugin extends PluginBase
         //return []; // Remove this line to activate
 
         return [
-            'Clake\UserExtended\Components\UserGroups' => 'usergroups',
-            'Clake\UserExtended\Components\ListFriends' => 'friends',
-            'Clake\UserExtended\Components\UserList' => 'userlist',
-            'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
+            'Clake\Dungeons\Components\DungeonList' => 'dungeonList',
+            'Clake\Dungeons\Components\DungeonLobby' => 'dungeonLobby',
         ];
     }
 
@@ -74,8 +71,8 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'clake.userextended.some_permission' => [
-                'tab' => 'UserExtended',
+            'clake.dungeons.some_permission' => [
+                'tab' => 'dungeons',
                 'label' => 'Some permission'
             ],
         ];
@@ -91,11 +88,11 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'userextended' => [
-                'label'       => 'UserExtended',
-                'url'         => Backend::url('clake/userextended/mycontroller'),
+            'dungeons' => [
+                'label'       => 'dungeons',
+                'url'         => Backend::url('clake/dungeons/mycontroller'),
                 'icon'        => 'icon-leaf',
-                'permissions' => ['clake.userextended.*'],
+                'permissions' => ['clake.dungeons.*'],
                 'order'       => 500,
             ],
         ];
