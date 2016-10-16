@@ -1,1 +1,14 @@
-1.0.1: First version of dungeons
+1.0.1:
+    - First release.
+1.0.2:
+    - Create the dungeon players table.
+    - create_dungeon_players_table.php
+1.0.3:
+    - Create the characters table.
+    - create_characters_table.php
+1.0.4:
+    - Create dungeons table.
+    - create_dungeons_table.php
+1.0.5:
+    - Make the slug unique.
+    - add_unique_to_dungeon_slug.php
