@@ -1,0 +1,34 @@
+title = "Dungeons"
+url = "/dungeons/:dungeon"
+layout = "home"
+description = "The dungeon lobby page"
+is_hidden = 0
+
+[dungeonLobby]
+dungeon = "{{ :dungeon }}"
+==
+<div class="row container" style="min-height:800px">
+
+    <div class="col s12 ">
+
+        {% if user %}
+        <div class="row" style="margin-top:55px;" >
+
+            <div class="col s12 m8 offset-m2">
+
+
+                <h3>{{dungeonLobby.dungeon.name}}</h3>
+
+                <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
+
+                {{dungeonLobby.users}}
+
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
