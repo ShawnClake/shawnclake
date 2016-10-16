@@ -9,6 +9,8 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
 
+    public $require = ['RainLab.User'];
+
     /**
      * Returns information about this plugin.
      *
@@ -17,8 +19,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'dungeons',
-            'description' => 'No description provided yet...',
+            'name'        => 'Dungeons',
+            'description' => 'Dungeons and dragons',
             'author'      => 'clake',
             'icon'        => 'icon-leaf'
         ];
@@ -51,10 +53,11 @@ class Plugin extends PluginBase
      */
     public function registerComponents()
     {
-        return []; // Remove this line to activate
+        //return []; // Remove this line to activate
 
         return [
-            'Clake\Dungeons\Components\MyComponent' => 'myComponent',
+            'Clake\Dungeons\Components\DungeonList' => 'dungeonList',
+            'Clake\Dungeons\Components\DungeonLobby' => 'dungeonLobby',
         ];
     }
 
