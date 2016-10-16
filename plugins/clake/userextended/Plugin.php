@@ -10,7 +10,7 @@ class Plugin extends PluginBase
 {
 
 
-    //public $require = ['rainlab.user'];
+    public $require = ['RainLab.User'];
 
     /**
      * Returns information about this plugin.
