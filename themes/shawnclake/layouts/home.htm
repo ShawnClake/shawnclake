@@ -92,7 +92,6 @@ $this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->Al
   </nav>-->
 </header>
 
-      
     {% page %}
     
     <footer class="page-footer green lighten-1" style="margin:0;">
@@ -129,8 +128,17 @@ $this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->Al
       <script type="text/javascript" src="{{ 'assets/js/materialize.min.js'|theme }}"></script>
       <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
       <script type="text/javascript" src="{{ 'assets/js/pusherintegration.js'|theme }}"></script>
-      {% framework extras %} 
+      <script type="text/javascript" src="{{ 'assets/js/pusher.user.js'|theme }}"></script>
+      {% framework extras %}
       <script>
+
+          {% if user %}
+                var personal = pusher.subscribe("private-u"+{{user.id}});
+                personal.bind('send', function(data) {
+                    console.log(data.message);
+                });
+          {% endif %}
+
           $(document).ready(function(){
        $('.carousel.carousel-slider').carousel({full_width: true});
     });
@@ -146,9 +154,6 @@ $this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->Al
     });
   });
 
-
-
-        
       </script>
     </body>
   </html>
