@@ -1,10 +1,9 @@
 <?php namespace Clake\Userextended\Components;
 
-use Clake\UserExtended\Broadcasts\TestUserAdded;
+use Clake\Pusher\Classes\Pusher;
 use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Cms\Classes\ComponentBase;
-use Pusher;
 
 class ListFriendRequests extends ComponentBase
 {
@@ -54,9 +53,12 @@ class ListFriendRequests extends ComponentBase
         if($userid != null)
             FriendsManager::acceptRequest($userid);
 
+        $data = UserUtil::getLoggedInUser()->toArray();
+        Pusher::init()->trigger('private-mychannel', 'tests', $data);
+
         //event(new TestUserAdded());
 
-        $options = array(
+/*        $options = array(
             'encrypted' => true
         );
         $pusher = new Pusher(
@@ -68,7 +70,7 @@ class ListFriendRequests extends ComponentBase
 
         //$data['message'] = 'hello world';
         $data = UserUtil::getLoggedInUser()->toArray();
-        $pusher->trigger('useradded', 'hi', $data);
+        $pusher->trigger('useradded', 'hi', $data);*/
 
 
     }
