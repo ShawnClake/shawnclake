@@ -29,19 +29,25 @@ class DungeonLobby extends ComponentBase
     public function dungeon()
     {
         $slug = $this->property('dungeon');
-        return DungeonManager::get('slug', $slug);
+        return DungeonManager::load($slug, 'slug')->get();
     }
 
     public function players()
     {
         $slug = $this->property('dungeon');
-        return json_encode(DungeonManager::players(DungeonManager::get('slug', $slug)));
+        return json_encode(DungeonManager::load($slug, 'slug')->players());
     }
 
     public function users()
     {
         $slug = $this->property('dungeon');
-        return json_encode(DungeonManager::users(DungeonManager::get('slug', $slug)));
+        return json_encode(DungeonManager::load($slug, 'slug')->users());
+    }
+
+    public function characters()
+    {
+        $slug = $this->property('dungeon');
+        return json_encode(DungeonManager::load($slug, 'slug')->characters());
     }
 
 }
