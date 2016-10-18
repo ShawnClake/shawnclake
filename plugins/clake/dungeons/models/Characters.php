@@ -29,7 +29,7 @@ class Characters extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [
-        'dungeonplayer' => 'Clake\Dungeons\Models\DungeonPlayers'
+        'dungeonplayer' => ['Clake\Dungeons\Models\DungeonPlayers', 'key' => 'dungeonplayers_id'],
     ];
     public $belongsToMany = [];
     public $morphTo = [];
