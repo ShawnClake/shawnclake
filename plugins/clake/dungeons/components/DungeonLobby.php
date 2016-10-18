@@ -1,6 +1,8 @@
 <?php namespace Clake\Dungeons\Components;
 
+use Clake\DataStructures\Classes\Grid;
 use Clake\Dungeons\Classes\DungeonManager;
+use Clake\UserExtended\Classes\UserUtil;
 use Cms\Classes\ComponentBase;
 
 class DungeonLobby extends ComponentBase
@@ -32,22 +34,47 @@ class DungeonLobby extends ComponentBase
         return DungeonManager::load($slug, 'slug')->get();
     }
 
+    public function authorized()
+    {
+        if(!UserUtil::getLoggedInUser())
+            return false;
+
+        $slug = $this->property('dungeon');
+        foreach(DungeonManager::load($slug, 'slug')->users() as $user)
+        {
+            if($user->id == UserUtil::getLoggedInUser()->id)
+                return true;
+        }
+        return false;
+    }
+
     public function players()
     {
         $slug = $this->property('dungeon');
-        return json_encode(DungeonManager::load($slug, 'slug')->players());
+        return DungeonManager::load($slug, 'slug')->players();
     }
 
     public function users()
     {
         $slug = $this->property('dungeon');
-        return json_encode(DungeonManager::load($slug, 'slug')->users());
+        return DungeonManager::load($slug, 'slug')->users();
     }
 
     public function characters()
     {
         $slug = $this->property('dungeon');
-        return json_encode(DungeonManager::load($slug, 'slug')->characters());
+        return DungeonManager::load($slug, 'slug')->characters();
+    }
+
+    public function all()
+    {
+        $slug = $this->property('dungeon');
+        $data = DungeonManager::load($slug, 'slug')->joined();
+        $grid = Grid::init(2)->gridify($data);
+        return [
+            'cols' => $grid->getAllColStyleSize(),
+            'data' => $grid->get()
+        ];
     }
 
 }
