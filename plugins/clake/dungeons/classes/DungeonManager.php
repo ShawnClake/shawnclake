@@ -69,4 +69,22 @@ class DungeonManager
         return $characters;
     }
 
+    public function joined()
+    {
+        $joined = new Collection;
+
+        $players = self::players($this->dungeon);
+
+        foreach($players as $player)
+        {
+            $tmp = new Collection();
+            $tmp->put('player', $player);
+            $tmp->put('user', $player->user);
+            $tmp->put('character', $player->character);
+            $joined->push($tmp);
+        }
+
+        return $joined;
+    }
+
 }
