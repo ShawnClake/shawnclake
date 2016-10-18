@@ -11,21 +11,72 @@ dungeon = "{{ :dungeon }}"
 
     <div class="col s12 ">
 
-        {% if user %}
-        <div class="row" style="margin-top:55px;" >
+        {% if user and dungeonLobby.authorized %}
+            <div class="row" style="margin-top:55px;" >
 
-            <div class="col s12 m8 offset-m2">
+                <div class="col s12 m8 offset-m2">
 
 
-                <h3>{{dungeonLobby.dungeon.name}}</h3>
+                    <h3>{{dungeonLobby.dungeon.name}} <i>Lobby</i></h3>
 
-                <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
+                    <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
 
-                {{dungeonLobby.characters}}
+                    {% for person in dungeonLobby.all %}
+
+                        <b>{{person.character.name}}</b> <br>
+                        <i>{{person.character.type}}</i> <br>
+                        Played by: {{person.user.name}}
+
+                        <br><br><br>
+
+                    {% endfor %}
+
+                </div>
 
             </div>
 
-        </div>
+
+            <div class="row" style="margin-top:55px;" >
+
+                <div class="col s12 m8 offset-m2">
+
+
+                    <h3>{{dungeonLobby.dungeon.name}} <i>Lobby</i></h3>
+
+                    <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
+
+                    {% for row in dungeonLobby.all.data %}
+                        <div class="row">
+                            {% for col in row %}
+                                <div class="col s{{dungeonLobby.all.cols.s}} m{{dungeonLobby.all.cols.m}} l{{dungeonLobby.all.cols.l}}">
+                                    <b>{{col.character.name}}</b> <br>
+                                    <i>{{col.character.type}}</i> <br>
+                                    Played by: {{col.user.name}}
+
+                                    <br><br><br>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% else %}
+
+            {% if not user %}
+
+                <h3>You are not logged in</h3>
+
+            {% else %}
+
+                <h3>You don't belong in this dungeon</h3>
+
+            {% endif %}
+
         {% endif %}
 
     </div>
