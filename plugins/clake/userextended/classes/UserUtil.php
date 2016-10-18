@@ -3,6 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Auth;
+use Redirect;
 
 class UserUtil
 {
@@ -15,5 +16,11 @@ class UserUtil
         $user->touchLastSeen();
 
         return $user;
+    }
+
+    public static function redirectIfNotLoggedIn($url = '/')
+    {
+        if(!self::getLoggedInUser())
+            return Redirect::to($url);
     }
 }
