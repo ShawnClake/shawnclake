@@ -133,7 +133,7 @@ $this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->Al
       <script>
 
           {% if user %}
-                var personal = pusher.subscribe("private-u"+{{user.id}});
+                var personal = pusher.subscribe("private-userchannel"+{{user.id}});
                 personal.bind('send', function(data) {
                     console.log(data.message);
                 });
