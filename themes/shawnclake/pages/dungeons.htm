@@ -12,6 +12,36 @@ dungeon = "{{ :dungeon }}"
     <div class="col s12 ">
 
         {% if user and dungeonLobby.authorized %}
+
+            <script type="text/javascript">
+                var dungeon = pusher.subscribe("presence-dungeonchannel"+{{dungeonLobby.dungeon.id}});
+
+                dungeon.bind('pusher:subscription_succeeded', function(members) {
+                    console.log(members);
+                    members.each(function(member){
+                        update_dungeon_status(member, "add");
+                    });
+                });
+
+                dungeon.bind('pusher:member_added', function(member) {
+                    update_dungeon_status(member, "add");
+                });
+
+                dungeon.bind('pusher:member_removed', function(member) {
+                    update_dungeon_status(member, "left");
+                });
+
+                setInterval(
+                        function(){
+                            dungeon.members.each(function(member){
+                                update_dungeon_status(member, "add");
+                            });
+                        }, 30000
+                );
+            </script>
+
+
+
             <div class="row" style="margin-top:55px;" >
 
                 <div class="col s12 m8 offset-m2">
@@ -49,7 +79,7 @@ dungeon = "{{ :dungeon }}"
                         <div class="row">
                             {% for col in row %}
                                 <div class="col s{{dungeonLobby.all.cols.s}} m{{dungeonLobby.all.cols.m}} l{{dungeonLobby.all.cols.l}}">
-                                    <b>{{col.character.name}}</b> <br>
+                                    <b class="dungeon-name" data-id="{{col.user.id}}" style="color:red;">{{col.character.name}}</b> <br>
                                     <i>{{col.character.type}}</i> <br>
                                     Played by: {{col.user.name}}
 
