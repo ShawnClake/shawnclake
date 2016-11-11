@@ -9,14 +9,25 @@ use RainLab\User\Models\User;
 class DungeonManager
 {
 
+    private $dungeon;
+
+    public static function load($value, $column = 'id')
+    {
+        $o = new static;
+
+        $o->dungeon = Dungeons::where($column, $value)->first();
+
+        return $o;
+    }
+
     public static function getDungeon($id)
     {
         return Dungeons::where('id', $id)->first();
     }
 
-    public static function get($column, $value)
+    public function get()
     {
-        return Dungeons::where($column, $value)->first();
+        return $this->dungeon;
     }
 
     public static function dungeons($limit = 100)
@@ -24,16 +35,16 @@ class DungeonManager
         return Dungeons::take($limit)->get();
     }
 
-    public static function players(Dungeons $dungeon)
+    public function players()
     {
-        return $dungeon->players;
+        return $this->dungeon->players;
     }
 
-    public static function users(Dungeons $dungeon)
+    public function users()
     {
         $users = new Collection;
 
-        $players =self::players($dungeon);
+        $players =self::players($this->dungeon);
 
         foreach($players as $player)
         {
@@ -42,6 +53,38 @@ class DungeonManager
 
         return $users;
 
+    }
+
+    public function characters()
+    {
+        $characters = new Collection;
+
+        $players =self::players($this->dungeon);
+
+        foreach($players as $player)
+        {
+            $characters->push($player->character);
+        }
+
+        return $characters;
+    }
+
+    public function joined()
+    {
+        $joined = new Collection;
+
+        $players = self::players($this->dungeon);
+
+        foreach($players as $player)
+        {
+            $tmp = new Collection();
+            $tmp->put('player', $player);
+            $tmp->put('user', $player->user);
+            $tmp->put('character', $player->character);
+            $joined->push($tmp);
+        }
+
+        return $joined;
     }
 
 }

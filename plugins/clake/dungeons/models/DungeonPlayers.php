@@ -27,7 +27,7 @@ class DungeonPlayers extends Model
      * @var array Relations
      */
     public $hasOne = [
-        'character' => 'Clake\Dungeons\Models\Characters'
+        'character' => ['Clake\Dungeons\Models\Characters', 'key' => 'dungeonplayers_id'],
     ];
     public $hasMany = [];
     public $belongsTo = [

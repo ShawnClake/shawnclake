@@ -14,7 +14,6 @@ class Pusher
     private $options = [];
     private $pusher;
 
-
     public static function init()
     {
         $o = new static();
@@ -33,23 +32,21 @@ class Pusher
 
     public function auth($channelName, $socketId)
     {
-        if(UserUtil::getLoggedInUser())
-        {
-            if(substr($channelName, 0, 7) == "private")
-                echo $this->pusher->socket_auth($channelName, $socketId);
-            else if(substr($channelName, 0, 8) == "presence")
-                echo $this->pusher->presence_auth($channelName, $socketId, UserUtil::getLoggedInUser()->id, UserUtil::getLoggedInUser()->toArray());
-            else
-            {
-                header('', true, 403);
-                echo "Forbidden";
-            }
-        }
+        $auth = true;
+
+        if(!UserUtil::getLoggedInUser())
+            $auth = false;
+
+        if(strlen($channelName) > 19 && substr($channelName,8,11) == "userchannel")
+            if(!(substr($channelName,19) == UserUtil::getLoggedInUser()->id))
+                $auth = false;
+
+        if($auth == true && substr($channelName, 0, 8) == "presence")
+            $this->allowPresence($channelName, $socketId);
+        else if($auth == true && substr($channelName, 0, 7) == "private")
+            $this->allowPrivate($channelName, $socketId);
         else
-        {
-            header('', true, 403);
-            echo "Forbidden";
-        }
+            $this->reject();
 
         return $this;
     }
@@ -58,6 +55,23 @@ class Pusher
     {
         $this->pusher->trigger($channel, $event, $data, post('socket_id'));
         return $this;
+    }
+
+    private function reject()
+    {
+        header('', true, 403);
+        echo "Forbidden";
+    }
+
+    private function allowPrivate($channelName, $socketId)
+    {
+        echo $this->pusher->socket_auth($channelName, $socketId);
+    }
+
+    private function allowPresence($channelName, $socketId)
+    {
+        echo $this->pusher->presence_auth($channelName, $socketId, UserUtil::getLoggedInUser()->id, UserUtil::getLoggedInUser()->toArray());
+
     }
 
 }

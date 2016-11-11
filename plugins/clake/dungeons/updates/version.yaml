@@ -12,3 +12,6 @@
 1.0.5:
     - Make the slug unique.
     - add_unique_to_dungeon_slug.php
+1.0.6:
+    - Add data to characters table.
+    - add_data_to_characters_table.php

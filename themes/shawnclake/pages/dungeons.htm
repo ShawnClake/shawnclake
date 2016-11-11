@@ -11,21 +11,102 @@ dungeon = "{{ :dungeon }}"
 
     <div class="col s12 ">
 
-        {% if user %}
-        <div class="row" style="margin-top:55px;" >
+        {% if user and dungeonLobby.authorized %}
 
-            <div class="col s12 m8 offset-m2">
+            <script type="text/javascript">
+                var dungeon = pusher.subscribe("presence-dungeonchannel"+{{dungeonLobby.dungeon.id}});
+
+                dungeon.bind('pusher:subscription_succeeded', function(members) {
+                    console.log(members);
+                    members.each(function(member){
+                        update_dungeon_status(member, "add");
+                    });
+                });
+
+                dungeon.bind('pusher:member_added', function(member) {
+                    update_dungeon_status(member, "add");
+                });
+
+                dungeon.bind('pusher:member_removed', function(member) {
+                    update_dungeon_status(member, "left");
+                });
+
+                setInterval(
+                        function(){
+                            dungeon.members.each(function(member){
+                                update_dungeon_status(member, "add");
+                            });
+                        }, 30000
+                );
+            </script>
 
 
-                <h3>{{dungeonLobby.dungeon.name}}</h3>
 
-                <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
+            <div class="row" style="margin-top:55px;" >
 
-                {{dungeonLobby.users}}
+                <div class="col s12 m8 offset-m2">
+
+
+                    <h3>{{dungeonLobby.dungeon.name}} <i>Lobby</i></h3>
+
+                    <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
+
+                    {% for person in dungeonLobby.all %}
+
+                        <b>{{person.character.name}}</b> <br>
+                        <i>{{person.character.type}}</i> <br>
+                        Played by: {{person.user.name}}
+
+                        <br><br><br>
+
+                    {% endfor %}
+
+                </div>
 
             </div>
 
-        </div>
+
+            <div class="row" style="margin-top:55px;" >
+
+                <div class="col s12 m8 offset-m2">
+
+
+                    <h3>{{dungeonLobby.dungeon.name}} <i>Lobby</i></h3>
+
+                    <p style="font-style:italic;">{{dungeonLobby.dungeon.description}}</p>
+
+                    {% for row in dungeonLobby.all.data %}
+                        <div class="row">
+                            {% for col in row %}
+                                <div class="col s{{dungeonLobby.all.cols.s}} m{{dungeonLobby.all.cols.m}} l{{dungeonLobby.all.cols.l}}">
+                                    <b class="dungeon-name" data-id="{{col.user.id}}" style="color:red;">{{col.character.name}}</b> <br>
+                                    <i>{{col.character.type}}</i> <br>
+                                    Played by: {{col.user.name}}
+
+                                    <br><br><br>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% else %}
+
+            {% if not user %}
+
+                <h3>You are not logged in</h3>
+
+            {% else %}
+
+                <h3>You don't belong in this dungeon</h3>
+
+            {% endif %}
+
         {% endif %}
 
     </div>
