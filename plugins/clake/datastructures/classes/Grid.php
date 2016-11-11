@@ -1,5 +1,11 @@
 <?php
 
+/**
+ *	Created by Shawn Clake
+ *  Uses an October collection to create an auto resizing grid.
+ *	
+*/
+
 namespace Clake\DataStructures\Classes;
 
 
