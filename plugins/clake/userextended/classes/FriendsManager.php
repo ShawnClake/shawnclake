@@ -7,6 +7,10 @@ use Auth;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
+/**
+ * Class FriendsManager
+ * @package Clake\UserExtended\Classes
+ */
 class FriendsManager
 {
 

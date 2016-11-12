@@ -19,6 +19,11 @@ class AuthEndpoint extends ComponentBase
         return [];
     }
 
+    /**
+     * When a page is loaded with the component attached it will return the result of the
+     * authentication process.
+     * This handles both private and presence channel authentications.
+     */
     public function onRun()
     {
         $channelName = post('channel_name');

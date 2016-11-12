@@ -44,6 +44,10 @@ class UserList extends ComponentBase
         ];
     }
 
+    /**
+     * Provides a variable to the page for listing users
+     * @return array|\Illuminate\Support\Collection
+     */
     public function userlist()
     {
 

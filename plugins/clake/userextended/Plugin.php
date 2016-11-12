@@ -1,6 +1,5 @@
 <?php namespace Clake\UserExtended;
 
-use Backend;
 use System\Classes\PluginBase;
 
 /**
@@ -21,9 +20,9 @@ class Plugin extends PluginBase
     {
         return [
             'name'        => 'UserExtended',
-            'description' => 'No description provided yet...',
+            'description' => 'Adds roles, friends, and utility functions to the Rainlab User plugin',
             'author'      => 'clake',
-            'icon'        => 'icon-leaf'
+            'icon'        => 'icon-user-plus'
         ];
     }
 
@@ -72,13 +71,6 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return []; // Remove this line to activate
-
-        return [
-            'clake.userextended.some_permission' => [
-                'tab' => 'UserExtended',
-                'label' => 'Some permission'
-            ],
-        ];
     }
 
     /**
@@ -89,16 +81,6 @@ class Plugin extends PluginBase
     public function registerNavigation()
     {
         return []; // Remove this line to activate
-
-        return [
-            'userextended' => [
-                'label'       => 'UserExtended',
-                'url'         => Backend::url('clake/userextended/mycontroller'),
-                'icon'        => 'icon-leaf',
-                'permissions' => ['clake.userextended.*'],
-                'order'       => 500,
-            ],
-        ];
     }
 
 }

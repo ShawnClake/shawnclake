@@ -4,14 +4,20 @@ namespace Clake\UserExtended\Classes;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
+/**
+ * Class UserManager
+ * @package Clake\UserExtended\Classes
+ */
 class UserManager
 {
-
-
+    /**
+     * Returns a random set of users. This won't return users in our friends list.
+     * @param int $limit
+     * @return Collection
+     */
     public static function getRandomUserSet($limit = 5)
     {
 
-        $users = new Collection;
         $returner = new Collection;
 
         $userCount = User::all()->count();

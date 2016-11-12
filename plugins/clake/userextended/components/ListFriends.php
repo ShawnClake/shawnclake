@@ -29,6 +29,10 @@ class ListFriends extends ComponentBase
         ];
     }
 
+    /**
+     * Returns a variable to the page which lists a users friends.
+     * @return static
+     */
     public function friends()
     {
 
@@ -38,6 +42,10 @@ class ListFriends extends ComponentBase
 
     }
 
+    /**
+     * Lists a random set of users. Useful for 'suggestions'
+     * @return \Illuminate\Support\Collection
+     */
     public function listRandomUsers()
     {
         return UserManager::getRandomUserSet(5);

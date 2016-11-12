@@ -9,6 +9,8 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
 
+    public $require = ['Clake.UserExtended'];
+
     /**
      * Returns information about this plugin.
      *
@@ -18,9 +20,9 @@ class Plugin extends PluginBase
     {
         return [
             'name'        => 'Pusher',
-            'description' => 'Pusher plugin for OctoberCMS',
+            'description' => 'Pusher plugin for OctoberCMS. It handles the authentication as well as triggering Pusher events.',
             'author'      => 'clake',
-            'icon'        => 'icon-leaf'
+            'icon'        => 'icon-cloud-upload'
         ];
     }
 
@@ -54,7 +56,7 @@ class Plugin extends PluginBase
         //return []; // Remove this line to activate
 
         return [
-            'Clake\Pusher\Components\AuthEndpoint' => 'authEndpoint',
+            'Clake\Pusher\Components\AuthEndpoint' => 'AuthEndpoint',
         ];
     }
 
@@ -66,13 +68,6 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return []; // Remove this line to activate
-
-        return [
-            'clake.pusher.some_permission' => [
-                'tab' => 'pusher',
-                'label' => 'Some permission'
-            ],
-        ];
     }
 
     /**
@@ -83,16 +78,6 @@ class Plugin extends PluginBase
     public function registerNavigation()
     {
         return []; // Remove this line to activate
-
-        return [
-            'pusher' => [
-                'label'       => 'pusher',
-                'url'         => Backend::url('clake/pusher/mycontroller'),
-                'icon'        => 'icon-leaf',
-                'permissions' => ['clake.pusher.*'],
-                'order'       => 500,
-            ],
-        ];
     }
 
 }

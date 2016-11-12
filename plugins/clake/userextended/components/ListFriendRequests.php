@@ -12,7 +12,7 @@ class ListFriendRequests extends ComponentBase
     {
         return [
             'name'        => 'ListFriendRequests Component',
-            'description' => 'No description provided yet...'
+            'description' => 'Lists a users received friend requests'
         ];
     }
 
@@ -55,23 +55,6 @@ class ListFriendRequests extends ComponentBase
 
         $data = UserUtil::getLoggedInUser()->toArray();
         Pusher::init()->trigger('private-mychannel', 'tests', $data);
-
-        //event(new TestUserAdded());
-
-/*        $options = array(
-            'encrypted' => true
-        );
-        $pusher = new Pusher(
-            '41637aa0aba7a37edcb1',
-            '42fc6a49f2f1ea20197b',
-            '259549',
-            $options
-        );
-
-        //$data['message'] = 'hello world';
-        $data = UserUtil::getLoggedInUser()->toArray();
-        $pusher->trigger('useradded', 'hi', $data);*/
-
 
     }
 
