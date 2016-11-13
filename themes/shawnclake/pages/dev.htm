@@ -25,6 +25,8 @@ userID = 0
 [friendrequests]
 maxItems = 5
 
+[usersearch]
+
 [dungeonList]
 ==
 <?php
@@ -134,6 +136,7 @@ function onStart()
 
 
                 </div>
+
                 <div class="col l7 s12">
 
                     <h5>Settings</h5>
@@ -212,6 +215,17 @@ function onStart()
                             </a>
                         {% endfor %}
 
+                    {% endif %}
+
+                    {% if GROUPS.tester %}
+                        <form data-request="usersearch::onSearch">
+                            Search Phrase: <input type="text"  name="phrase" />
+                            <input type="submit" value="Search" />
+                        </form>
+
+                        <br>
+
+                        <div id="userSearchResults"></div>
                     {% endif %}
 
                 </div>
