@@ -10,7 +10,7 @@ class ListFriends extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'ListFriends Component',
+            'name'        => 'Friends List',
             'description' => 'List a users friends'
         ];
     }
