@@ -71,7 +71,7 @@ class FriendsManager
 
     /**
      * Returns whether or not a user is our friend
-     *
+     * Leave the second parameter blank to user the logged in user
      * @param $userID1
      * @param null $userID2
      * @return bool
