@@ -13,7 +13,7 @@ class Enum
      * @var array
      */
     protected $enum = [];
-    private $selected;
+    private $selected = null;
 
     /**
      * Ensures the selected ENUM is blank on creation
@@ -42,14 +42,13 @@ class Enum
     /**
      * Used to dynamically set the set ENUM value
      * IE. $enum(PENNY) will set the $enum to PENNY and return the Enum
-     * @return static
+     *
      */
-    public static function __invoke($value)
+    public function __invoke($value)
     {
-        $o = new static;
-        if(in_array($value, $o->enum))
-            $o->selected = $value;
-        return $o;
+        if(in_array($value, $this->enum))
+            $this->selected = $value;
+        return $this;
     }
 
     /**
