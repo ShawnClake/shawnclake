@@ -3,6 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Auth;
+use Clake\Userextended\Models\UserExtended;
 use RainLab\User\Models\User;
 use Redirect;
 
@@ -31,6 +32,18 @@ class UserUtil
      * @return mixed
      */
     public static function getUser($value, $property = "id")
+    {
+        return UserExtended::where($property, $value)->first();
+    }
+
+    /**
+     * Get the rainlab user instance.
+     * Required for backward compatibility with relations like 'avatar'
+     * @param $value
+     * @param string $property
+     * @return mixed
+     */
+    public static function getRainlabUser($value, $property = "id")
     {
         return User::where($property, $value)->first();
     }
