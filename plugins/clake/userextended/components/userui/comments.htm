@@ -1,0 +1,7 @@
+{% for comment in comments %}
+<div class="userblock">
+    {{comment.content}} <br>
+    <i style="font-size:11px;">Written at: {{comment.created_at}} by <a href="/users/{{comment.author.id}}">{{comment.author.name}}</a></i>
+    <hr>
+</div>
+{% endfor %}
