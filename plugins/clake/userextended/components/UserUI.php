@@ -2,6 +2,7 @@
 
 use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\Comments;
 use Cms\Classes\ComponentBase;
 
 class UserUI extends ComponentBase
@@ -37,7 +38,7 @@ class UserUI extends ComponentBase
     {
         $userid = $this->property('user');
 
-        return UserUtil::getUser($userid);
+        return UserUtil::getRainlabUser($userid);
     }
 
     /**
@@ -48,6 +49,9 @@ class UserUI extends ComponentBase
     public function unrestricted()
     {
         $userid = $this->property('user');
+
+        if(!UserUtil::getLoggedInUser())
+            return null;
 
         return (FriendsManager::isFriend($userid)) || (UserUtil::getLoggedInUser()->id == $userid);
     }
@@ -62,5 +66,49 @@ class UserUI extends ComponentBase
         FriendsManager::sendFriendRequest($userid);
     }
 
+    /**
+     * Returns a collection of comments for a users profile
+     * @return mixed
+     */
+    public function comments()
+    {
+        $userid = $this->property('user');
+
+        return UserUtil::getUser($userid)->comments()->orderby('updated_at', 'desc')->get();
+    }
+
+    /**
+     * AJAX handler for when someone leaves a comment on a profile
+     * @return array
+     */
+    public function onComment()
+    {
+        $userid = $this->property('user');
+
+        $user = UserUtil::getUser($userid);
+
+        $author = UserUtil::getLoggedInUser();
+
+        $comment = new Comments();
+
+        $comment->user = $user;
+        $comment->author = $author;
+        $comment->content = post('comment');
+
+        $comment->save();
+
+        return $this->renderComments($this->comments());
+    }
+
+    /**
+     * Used to dynamically update the comment section when a user leaves a new comment
+     * @param $comments
+     * @return array
+     */
+    private function renderComments($comments)
+    {
+        $content = $this->renderPartial('userui::comments.htm', ['comments' => $comments]);
+        return ['#comment_section' => $content];
+    }
 
 }
