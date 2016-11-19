@@ -11,8 +11,8 @@ class ListFriendRequests extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'ListFriendRequests Component',
-            'description' => 'No description provided yet...'
+            'name'        => 'Friend request list',
+            'description' => 'Lists a users received friend requests'
         ];
     }
 
@@ -53,24 +53,17 @@ class ListFriendRequests extends ComponentBase
         if($userid != null)
             FriendsManager::acceptRequest($userid);
 
-        $data = UserUtil::getLoggedInUser()->toArray();
-        Pusher::init()->trigger('private-mychannel', 'tests', $data);
+        //$data = UserUtil::getLoggedInUser()->toArray();
+        //Pusher::init()->trigger('private-mychannel', 'tests', $data);
 
-        //event(new TestUserAdded());
+    }
 
-/*        $options = array(
-            'encrypted' => true
-        );
-        $pusher = new Pusher(
-            '41637aa0aba7a37edcb1',
-            '42fc6a49f2f1ea20197b',
-            '259549',
-            $options
-        );
+    public function onDecline()
+    {
+        $userid = post('id');
 
-        //$data['message'] = 'hello world';
-        $data = UserUtil::getLoggedInUser()->toArray();
-        $pusher->trigger('useradded', 'hi', $data);*/
+        if($userid != null)
+            FriendsManager::declineRequest($userid);
 
 
     }

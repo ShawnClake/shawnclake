@@ -10,7 +10,7 @@ class UserList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'UserList Component',
+            'name'        => 'User list',
             'description' => 'Provides an interface for listing users'
         ];
     }
@@ -44,6 +44,10 @@ class UserList extends ComponentBase
         ];
     }
 
+    /**
+     * Provides a variable to the page for listing users
+     * @return array|\Illuminate\Support\Collection
+     */
     public function userlist()
     {
 

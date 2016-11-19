@@ -1,0 +1,10 @@
+title = "Users"
+url = "/users/:user"
+layout = "home"
+description = "The users profile pages"
+is_hidden = 0
+
+[userui]
+user = "{{ :user }}"
+==
+{% partial "userui::profile" %}

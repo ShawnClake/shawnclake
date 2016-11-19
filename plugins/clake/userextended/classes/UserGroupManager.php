@@ -3,6 +3,10 @@
 use Auth;
 use RainLab\User\Models\UserGroup;
 
+/**
+ * Class UserGroupManager
+ * @package Clake\UserExtended\Classes
+ */
 class UserGroupManager {
 
     // Stores an array of UserGroups. ["GroupName" => "GroupDescriptionObject"]
@@ -100,6 +104,10 @@ class UserGroupManager {
             }
 
         }
+
+        //$user = UserUtil::getLoggedInUser();
+
+        //$groups = $user->groups()->get();
 
         self::$userGroups = $groups;
 

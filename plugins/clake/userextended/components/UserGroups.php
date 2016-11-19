@@ -10,8 +10,8 @@ class UserGroups extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'UserGroups',
-            'description' => 'Used to return a list of UserGroups'
+            'name'        => 'User groups list',
+            'description' => 'Returns a list of UserGroups'
         ];
     }
 
@@ -19,12 +19,13 @@ class UserGroups extends ComponentBase
     {
         return [];
     }
-	
+
+    /**
+     * Returns a list of user groups to the page in a variable called 'groups'
+     */
 	public function onRun() 
 	{
-
-        $this->page['groups'] = UserGroupManager::CurrentUser()->All()->Get(); //$usergroup->users()->get();
-
+        $this->page['groups'] = UserGroupManager::CurrentUser()->All()->Get();
 	}
 
 }
