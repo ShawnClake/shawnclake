@@ -3,6 +3,8 @@
 use Model;
 use \October\Rain\Database\Traits\Encryptable;
 
+use \October\Rain\Database\Traits\SoftDelete;
+
 /**
  * Comments Model
  */
@@ -11,7 +13,11 @@ class Comments extends Model
 
     use Encryptable;
 
+    use SoftDelete;
+
     protected $encryptable = ['content'];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * @var string The database table used by the model.

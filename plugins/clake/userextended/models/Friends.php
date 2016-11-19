@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Models;
 
 use Model;
+use \October\Rain\Database\Traits\SoftDelete;
 
 /**
  * friends Model
@@ -8,10 +9,14 @@ use Model;
 class Friends extends Model
 {
 
+    use SoftDelete;
+
     /**
      * @var string The database table used by the model.
      */
     public $table = 'clake_userextended_friends';
+
+    protected $dates = ['deleted_at'];
 
     /**
      * @var array Guarded fields
