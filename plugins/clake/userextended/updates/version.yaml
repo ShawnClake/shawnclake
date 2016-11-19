@@ -17,3 +17,5 @@
     - comments_add_author.php
 1.0.7:
     - Added user profile pages
+1.0.8:
+    - Added delete capabilities for comments and friends
