@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Classes\CommentManager;
 use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Comments;
@@ -84,18 +85,19 @@ class UserUI extends ComponentBase
     public function onComment()
     {
         $userid = $this->property('user');
+        $content = post('comment');
 
-        $user = UserUtil::getUser($userid);
+        CommentManager::createComment($userid, $content);
 
-        $author = UserUtil::getLoggedInUser();
+        return $this->renderComments($this->comments());
+    }
 
-        $comment = new Comments();
+    public function onDeleteComment()
+    {
+        $userid = $this->property('user');
+        $commentid = post('commentid');
 
-        $comment->user = $user;
-        $comment->author = $author;
-        $comment->content = post('comment');
-
-        $comment->save();
+        CommentManager::deleteComment($commentid);
 
         return $this->renderComments($this->comments());
     }
