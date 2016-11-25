@@ -21,6 +21,10 @@ class UserExtended extends User
         $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comments', 'key'=>'author_id'];
         $this->hasMany = $hasMany;
 
+        $belongsTo = $this->belongsTo;
+        $belongsTo['timezone'] = ['Clake\UserExtended\Models\Timezone', 'key' => 'timezone_id'];
+        $this->belongsTo = $belongsTo;
+
         parent::__construct();
     }
 
