@@ -15,5 +15,14 @@ columns:
     code:
         label: rainlab.user::lang.group.code
 
+    description:
+        label: Description
+        type: tinytext
+
+    sort_order:
+        label: Priority
+        type: number
+
+
     created_at:
         label: rainlab.user::lang.group.created_at

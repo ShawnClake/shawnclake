@@ -11,18 +11,18 @@ use RainLab\User\Models\UserGroup;
 class GroupsExtended extends Controller
 {
     public $implement = [
-        'Backend.Behaviors.ReorderController'
+        'Backend.Behaviors.ListController',
+        'Backend.Behaviors.ReorderController',
+        'Backend.Behaviors.FormController',
+        'Backend.Behaviors.RelationController',
     ];
 
     public $reorderConfig = 'config_reorder.yaml';
+    public $formConfig = 'config_form.yaml';
+    public $listConfig = 'config_list.yaml';
+    public $relationConfig = 'config_relation.yaml';
 
     //public $requiredPermissions = ['rainlab.users.access_groups'];
-
-    public function index()
-    {
-
-
-    }
 
     public function __construct()
     {
