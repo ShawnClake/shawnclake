@@ -26,3 +26,18 @@
     - user_groups_add_level.php
 1.0.11:
     - Updated User Group Seeder. You may wish to consider to rerun it.
+1.0.12:
+    - Added Timezone table
+    - create_timezones_table.php
+1.0.13:
+    - Modified Users table to add a timezone_id column
+    - user_add_timezone.php
+1.0.14:
+    - Seed timezones
+    - seed_time_zones.php
+1.0.15:
+    - Create Roles table
+    - create_roles_table.php
+1.0.16:
+    - Added Roles as a linear heirarchy under a group.
+    - Use Case 1; You own a blogging company with a group called 'writers'. The writers group can have roles 'Senior Writer', 'Junior Writer', and 'Writer Editor'
