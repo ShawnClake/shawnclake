@@ -8,13 +8,13 @@ class SeedUserGroupsTable extends Seeder
     public function run()
     {
         UserGroup::create([
-            'name' => 'Admin',
+            'name' => 'Admins',
             'code' => 'admin',
             'description' => 'Administrator group',
         ]);
 
         UserGroup::create([
-            'name' => 'Friend',
+            'name' => 'Friends',
             'code' => 'friend',
             'description' => 'Generalized friend group.',
         ]);
@@ -26,19 +26,19 @@ class SeedUserGroupsTable extends Seeder
         ]);*/
 
         UserGroup::create([
-            'name' => 'Tester',
+            'name' => 'Testers',
             'code' => 'tester',
             'description' => 'Access bleeding edge features',
         ]);
 
         UserGroup::create([
-            'name' => 'Debugger',
+            'name' => 'Debuggers',
             'code' => 'debugger',
             'description' => 'Debug text, buttons, and visuals appear on the pages',
         ]);
 
         UserGroup::create([
-            'name' => 'Developer',
+            'name' => 'Developers',
             'code' => 'developer',
             'description' => 'Access to the dev tools and options',
         ]);
