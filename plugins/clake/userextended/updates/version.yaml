@@ -19,3 +19,10 @@
     - Added user profile pages
 1.0.8:
     - Added delete capabilities for comments and friends
+1.0.9:
+    - Fixed 'Code Already In use' bug
+1.0.10:
+    - Added Heirarchal Level to User Groups
+    - user_groups_add_level.php
+1.0.11:
+    - Updated User Group Seeder. You may wish to consider to rerun it.

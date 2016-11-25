@@ -1,7 +1,9 @@
 <?php namespace Clake\UserExtended;
 
+use Backend\Classes\Controller;
 use System\Classes\PluginBase;
-
+use Event;
+use Backend;
 /**
  * UserExtended Plugin Information File
  */
@@ -43,6 +45,59 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+
+        Event::listen('backend.menu.extendItems', function($manager) {
+
+            $manager->addSideMenuItems('RainLab.User', 'user', [
+                'groups' => [
+                    'label' => 'Group Manager',
+                    'url'         => Backend::url('clake/userextended/groupsextended'),
+                    'icon'        => 'icon-user',
+                    'order'       => 500,
+                ]
+            ]);
+
+        });
+
+        /*Controller::extend(function($controller){
+
+            if(!$controller instanceof \RainLab\User\Controllers\UserGroups)
+                return;
+
+            $controller->reorderConfig = plugins_path('clake/userextended/controllers/groupsextended/config_reorder.yaml');
+
+            $controller->implement[] = 'Backend.Behaviors.ReorderController';
+
+        });*/
+
+
+
+        /*Event::listen('backend.form.extendFields', function($widget) {
+
+            // Only for the User controller
+            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
+                return;
+            }
+
+            // Only for the User model
+            if (!$widget->model instanceof \RainLab\User\Models\User) {
+                return;
+            }
+
+            // Add an extra birthday field
+            $widget->addFields([
+                'birthday' => [
+                    'label'   => 'Birthday',
+                    'comment' => 'Select the users birthday',
+                    'type'    => 'datepicker'
+                ]
+            ]);
+
+            // Remove a Surname field
+            $widget->removeField('surname');
+        });*/
+
+        return [];
 
     }
 

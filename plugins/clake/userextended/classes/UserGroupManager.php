@@ -151,7 +151,4 @@ class UserGroupManager {
 
     }
 
-
-
-
 }
