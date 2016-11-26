@@ -1,0 +1,13 @@
+<div style="font-size:14px;" >
+<?php if($roles->count() != 0): foreach($roles as $index => $role): ?>
+<div style="margin-top:9px;">
+    <span><a style=" <?php if($index == 0): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveUp" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-up"></i></a></span>
+    <span><a style=" <?php if($index == $roleCount - 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveDown" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-down"></i></a></span>
+    <span><?= $role->name ?></span>
+</div>
+<?php endforeach; else: ?>
+
+    <span>No roles currently exist in this group</span>
+
+<?php endif ?>
+</div>
