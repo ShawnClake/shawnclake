@@ -30,5 +30,4 @@ class GroupsExtended extends Controller
 
         //BackendMenu::setContext('RainLab.User', 'user', 'usergroups');
     }
-
 }
