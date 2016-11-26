@@ -25,6 +25,10 @@ class UserExtended extends User
         $belongsTo['timezone'] = ['Clake\UserExtended\Models\Timezone', 'key' => 'timezone_id'];
         $this->belongsTo = $belongsTo;
 
+        $belongsToMany = $this->belongsToMany;
+        $belongsToMany['roles'] = ['Clake\Userextended\Models\Roles', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
+        $this->belongsToMany = $belongsToMany;
+
         parent::__construct();
     }
 
