@@ -95,19 +95,56 @@ class UserRoleManager
         return $this;
     }
 
+    public function getRoleByGroup($groupCode)
+    {
+        return $this->userRoles[strtolower($groupCode)];
+    }
+
+    public function setRoleByGroup($groupCode, $role)
+    {
+        $this->userRoles[strtolower($groupCode)] = $role;
+    }
+
     public function promote($groupCode)
     {
         if(!UserGroupManager::CurrentUser()->All()->IsInGroup($groupCode))
-            return;
+            return $this;
 
-        $role = $this->userRoles[strtolower($groupCode)];
+        $role = $this->getRoleByGroup($groupCode);
+
+        if($role->sort_order < 2)
+            return $this;
+
         $roleGroup = $role->group;
 
         $roles = $this->getGroupRolesByOrdering($roleGroup);
 
         $newRole = $roles[$role->sort_order - 1];
 
-        $this->userRoles[strtolower($groupCode)] = $newRole;
+        $this->setRoleByGroup($groupCode, $newRole);
+
+        $this->saveRoles();
+
+        return $this;
+    }
+
+    public function demote($groupCode)
+    {
+        if(!UserGroupManager::CurrentUser()->All()->IsInGroup($groupCode))
+            return $this;
+
+        $role = $this->getRoleByGroup($groupCode);
+
+        if($role->sort_order > (GroupManager::all()->roleCount($groupCode) - 1))
+            return $this;
+
+        $roleGroup = $role->group;
+
+        $roles = $this->getGroupRolesByOrdering($roleGroup);
+
+        $newRole = $roles[$role->sort_order + 1];
+
+        $this->setRoleByGroup($groupCode, $newRole);
 
         $this->saveRoles();
 
