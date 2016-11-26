@@ -21,4 +21,28 @@ class RoleManager
         return $instance;
     }
 
+    public function init()
+    {
+        $instance = new static;
+        return $instance;
+    }
+
+    public function setGroup($code)
+    {
+        $this->group = GroupsExtended::where('code', $code)->first();
+        if($this->group != null)
+            $this->roles = $this->group->roles;
+        return $this;
+    }
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    public function all()
+    {
+
+    }
+
 }
