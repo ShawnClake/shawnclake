@@ -136,7 +136,12 @@ class UserUtil
         $minutes = 0;
         $hours = $time[0];
         if(isset($time[1]))
+        {
             $minutes = $time[1];
+            if($hours < 0)
+                $minutes *= -1;
+        }
+
         return [
             'minutes' => $minutes,
             'hours' => $hours,
@@ -198,6 +203,18 @@ class UserUtil
     }
 
     /**
+     * Get the time adjustment for the timezone of the currently logged in user.
+     * @param $time
+     * @return mixed
+     */
+    public static function getLoggedInUsersTimeAdjusted($time)
+    {
+        $offset = self::getLoggedInUsersTimezone()->offset;
+        $adjustment = self::getTimeStringAdjustments($offset);
+        return self::getTimeAdjusted($time, $adjustment['minutes'], $adjustment['hours']);
+    }
+
+    /**
      * Casts the Rainlab.User model to Clake.UserExtended
      * @param UserExtended $user
      * @return User
@@ -219,6 +236,16 @@ class UserUtil
         $userExtended = new UserExtended();
         $userExtended->attributes = $user->attributes;
         return $userExtended;
+    }
+
+    /**
+     * Handle the Twig filter for allowing us to automatically reformat dates for the appropriate timezone
+     * @param $time
+     * @return mixed
+     */
+    public static function twigTimezoneAdjustment($time)
+    {
+        return self::getLoggedInUsersTimeAdjusted($time);
     }
 
 
