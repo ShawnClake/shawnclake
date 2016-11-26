@@ -28,6 +28,20 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerMarkupTags()
+    {
+        return [
+
+            'filters' => [
+
+                'timezonify' => ['Clake\Userextended\Classes\UserUtil', 'twigTimezoneAdjustment'],
+
+            ],
+
+        ];
+    }
+
+
     /**
      * Register method, called when the plugin is first registered.
      *
