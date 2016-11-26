@@ -28,6 +28,10 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * Adds twig filters and functions
+     * @return array
+     */
     public function registerMarkupTags()
     {
         return [
@@ -60,6 +64,10 @@ class Plugin extends PluginBase
     public function boot()
     {
 
+
+        /**
+         * Event listener adds the Group Manager button to the side bar of the User backend UI.
+         */
         Event::listen('backend.menu.extendItems', function($manager) {
 
             $manager->addSideMenuItems('RainLab.User', 'user', [
@@ -68,7 +76,19 @@ class Plugin extends PluginBase
                     'url'         => Backend::url('clake/userextended/groupsextended'),
                     'icon'        => 'icon-user',
                     'order'       => 500,
-                ]
+                ],
+                'roles' => [
+                    'label' => 'Role Manager',
+                    'url'         => Backend::url('clake/userextended/roles'),
+                    'icon'        => 'icon-user',
+                    'order'       => 600,
+                ],
+                'users-side' => [
+                    'label' => 'Users',
+                    'url'         => Backend::url('rainlab/user/users'),
+                    'icon'        => 'icon-user',
+                    'order'       => 100,
+                ],
             ]);
 
         });
