@@ -52,3 +52,5 @@
     - users_groups_add_primary_id.php
 1.0.20:
     - Added a controller for Roles. Check the 'User' tab in the backend.
+1.0.21:
+    - Added the Timezonable trait. Useful for automatically converting model fields to the logged in users timezone.
