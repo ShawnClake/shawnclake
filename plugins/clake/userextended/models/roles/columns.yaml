@@ -21,8 +21,7 @@ columns:
 
     sort_order:
         label: Priority
-        type: number
-
+        type: integer
 
     created_at:
         label: rainlab.user::lang.group.created_at

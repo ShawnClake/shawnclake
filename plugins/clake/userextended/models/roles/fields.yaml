@@ -17,7 +17,3 @@ fields:
         label: rainlab.user::lang.group.description_field
         type: textarea
         size: tiny
-
-    sort_order:
-        label: Priority
-        type: number

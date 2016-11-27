@@ -24,7 +24,11 @@ recordsPerPage: 20
 showSetup: true
 
 # Displays the sorting link on each column
-showSorting: true
+showSorting: false
+
+defaultSorting:
+      column: sort_order
+      direction: asc
 
 # Default sorting column
 # defaultSort:
