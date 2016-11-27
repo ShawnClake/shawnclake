@@ -45,6 +45,16 @@ class RoleManager
         return $instance;
     }
 
+    public function getRoleIfExists($code)
+    {
+        foreach($this->roles as $role)
+        {
+            if ($role->code == $code)
+                return $role;
+        }
+        return false;
+    }
+
     /**
      * Filling the class with roles for the group code passed to this function
      * @param $code
