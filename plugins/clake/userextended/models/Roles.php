@@ -5,7 +5,10 @@ use Clake\UserExtended\Classes\RoleManager;
 use Model;
 use October\Rain\Support\Collection;
 
+use Clake\UserExtended\Traits\Timezonable;
+
 //use October\Rain\Database\Traits\Sortable;
+//use October\Rain\Database\Traits\Encryptable
 
 /**
  * Roles Model
@@ -13,6 +16,7 @@ use October\Rain\Support\Collection;
 class Roles extends Model
 {
     //use Sortable;
+    use Timezonable;
 
     /**
      * @var string The database table used by the model.
@@ -28,6 +32,11 @@ class Roles extends Model
      * @var array Fillable fields
      */
     protected $fillable = [];
+
+    protected $timezonable = [
+        'updated_at',
+        'created_at'
+    ];
 
     /**
      * @var array Relations
@@ -61,5 +70,7 @@ class Roles extends Model
             return false;
         }
     }
+
+
 
 }
