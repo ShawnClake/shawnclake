@@ -248,5 +248,10 @@ class UserUtil
         return self::getLoggedInUsersTimeAdjusted($time);
     }
 
+    public static function getUTCTimezone()
+    {
+        return Timezone::where('id', 1)->first();
+    }
+
 
 }
