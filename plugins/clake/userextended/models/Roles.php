@@ -1,14 +1,18 @@
 <?php namespace Clake\Userextended\Models;
 
+use Clake\UserExtended\Classes\GroupManager;
+use Clake\UserExtended\Classes\RoleManager;
 use Model;
-use October\Rain\Database\Traits\Sortable;
+use October\Rain\Support\Collection;
+
+//use October\Rain\Database\Traits\Sortable;
 
 /**
  * Roles Model
  */
 class Roles extends Model
 {
-    use Sortable;
+    //use Sortable;
 
     /**
      * @var string The database table used by the model.
@@ -42,5 +46,20 @@ class Roles extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    public function beforeCreate()
+    {
+        $this->sort_order = RoleManager::initGroupRolesByCode($this->group->code)->count() + 1;
+    }
+
+    public function beforeUpdate()
+    {
+        $total = RoleManager::initGroupRolesByCode($this->group->code)->count();
+
+        if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
+        {
+            return false;
+        }
+    }
 
 }
