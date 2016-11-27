@@ -40,7 +40,7 @@ class Roles extends Controller
         $this->vars['selectedGroup'] = GroupManager::all()->get()->first();
 
         $groupRoles = RoleManager::initGroupRolesByCode($this->vars['selectedGroup']->code);
-        $roleModels = $groupRoles->get();
+        $roleModels = $groupRoles->getSorted();
         if(!isset($roleModels))
             return;
         $this->vars['groupRoles'] = ['roles' => $roleModels, 'roleCount' => $groupRoles->count()];
@@ -67,7 +67,7 @@ class Roles extends Controller
     public function renderRoles($groupCode)
     {
         $roles = RoleManager::initGroupRolesByCode($groupCode);
-        $roleModels = $roles->get();
+        $roleModels = $roles->getSorted();
         if(!isset($roleModels))
             return;
         return [
