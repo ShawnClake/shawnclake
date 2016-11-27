@@ -79,7 +79,7 @@ class Plugin extends PluginBase
                 ],
                 'roles' => [
                     'label' => 'Role Manager',
-                    'url'         => Backend::url('clake/userextended/roles'),
+                    'url'         => Backend::url('clake/userextended/roles/manage'),
                     'icon'        => 'icon-user',
                     'order'       => 600,
                 ],
