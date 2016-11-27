@@ -4,6 +4,7 @@ namespace Clake\UserExtended\Classes;
 
 
 use Clake\Userextended\Models\GroupsExtended;
+use October\Rain\Support\Collection;
 
 /**
  * Class RoleManager
@@ -126,6 +127,28 @@ class RoleManager
 
         $movingUp->save();
         $movingDown->save();
+    }
+
+    public function getSorted()
+    {
+        $this->sort();
+        return $this->roles;
+    }
+
+    public function sort()
+    {
+        $sorted = $this->getGroupRolesByOrdering();
+
+        $roles = new Collection();
+
+        foreach($sorted as $role)
+        {
+            $roles->push($role);
+        }
+
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
