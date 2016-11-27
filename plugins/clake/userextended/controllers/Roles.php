@@ -4,6 +4,7 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
+use October\Rain\Support\Facades\Flash;
 
 /**
  * Roles Back-end Controller
@@ -44,6 +45,10 @@ class Roles extends Controller
         if(!isset($roleModels))
             return;
         $this->vars['groupRoles'] = ['roles' => $roleModels, 'roleCount' => $groupRoles->count()];
+
+        if($roleModels->count() > 0)
+            $this->vars['role'] = $roleModels[0];
+
         //$this->vars['selectedGroup'] = $this->selectedGroupd;
         //return $this->renderRoles($selected);
     }
@@ -56,7 +61,19 @@ class Roles extends Controller
     {
         $groupCode = post('code');
         $this->vars['selectedGroup'] = GroupManager::retrieve($groupCode);
-        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode));
+        $roles = RoleManager::initGroupRolesByCode($groupCode)->getSorted();
+        if($roles->count() > 0)
+        {
+            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+        }
+        else
+        {
+            $roleRender = ['#manage_role' => 'No roles currently exist in this group'];
+            $roleToolbarRender = [];
+        }
+
+        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender);
     }
 
     /**
@@ -106,6 +123,31 @@ class Roles extends Controller
         ];
     }
 
+    public function renderRole($roleCode, $groupCode)
+    {
+
+        $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
+
+        if(!isset($role))
+            return;
+
+        return [
+            '#manage_role' => $this->makePartial('manage_role', ['role' => $role]),
+        ];
+    }
+
+    public function renderManagementToolbar($roleCode, $groupCode)
+    {
+        $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
+
+        if(!isset($role))
+            return;
+
+        return [
+            '#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => $role]),
+        ];
+    }
+
     /**
      * AJAX handler called when trying to move a role higher in the heirarchy
      * @return array|void
@@ -128,5 +170,50 @@ class Roles extends Controller
         $roleSortOrder = post('order');
         RoleManager::initGroupRolesByCode($groupCode)->sortDown($roleSortOrder);
         return $this->renderRoles($groupCode);
+    }
+
+    public function onManageRole()
+    {
+        $groupCode = post('groupCode');
+        $roleCode = post('roleCode');
+        return array_merge($this->renderRole($roleCode, $groupCode), $this->renderManagementToolbar($roleCode, $groupCode));
+    }
+
+    public function onOpenRole()
+    {
+        $groupCode = post('groupCode');
+        $roleCode = post('roleCode');
+        $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
+        return $this->makePartial('update_role_form', ['role' => $role]);
+    }
+
+    public function onSaveRole()
+    {
+        $groupCode = post('groupCode');
+        $roleCode = post('roleCode');
+        $name = post('name');
+        $code = post('code');
+        $description = post('description');
+        $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
+        $role->name = $name;
+        $role->code = $code;
+        $role->description = $description;
+        $role->save();
+
+        $roles = RoleManager::initGroupRolesByCode($groupCode)->getSorted();
+        if($roles->count() > 0)
+        {
+            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+        }
+        else
+        {
+            $roleRender = ['#manage_role' => 'No roles currently exist in this group'];
+            $roleToolbarRender = [];
+        }
+        Flash::success('Role successfully saved!');
+
+        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>']);
+
     }
 }
