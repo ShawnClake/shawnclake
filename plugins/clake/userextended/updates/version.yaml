@@ -54,3 +54,5 @@
     - Added a controller for Roles. Check the 'User' tab in the backend.
 1.0.21:
     - Added the Timezonable trait. Useful for automatically converting model fields to the logged in users timezone.
+1.0.22:
+    - Initial release of the Role Manager in the backend.
