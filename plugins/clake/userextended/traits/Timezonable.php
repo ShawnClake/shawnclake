@@ -4,13 +4,26 @@ namespace Clake\UserExtended\Traits;
 
 
 use Carbon\Carbon;
+use Clake\UserExtended\Classes\TimezoneHandler;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\UserExtended;
 use Exception;
 
+/**
+ * Class Timezonable
+ * @package Clake\UserExtended\Traits
+ *
+ * Adds automated Timezone adjustments to models via the class variable 'timezonable'
+ */
 trait Timezonable
 {
 
+    /**
+     * Returns a timestamp adjusted by the logged in users Timezone
+     * @param $timestamp
+     * @param UserExtended|null $user
+     * @return mixed
+     */
     public function getTime($timestamp, UserExtended $user = null)
     {
 
@@ -20,18 +33,29 @@ trait Timezonable
             $timezone = UserUtil::getUserTimezone($user->id);
 
         if($timezone == null)
-            $timezone = UserUtil::getUTCTimezone();
+            $timezone = TimezoneHandler::getUTCTimezone();
 
         $timestamp = new Carbon($timestamp);
 
-        return UserUtil::getTimeAdjustedByTimezone($timestamp, $timezone);
+        return TimezoneHandler::getTimeAdjustedByTimezone($timestamp, $timezone);
 
     }
 
+    /**
+     * Returns a timestamp adjusted by the logged in users Timezone
+     * Alias for getTime()
+     * @param $timestamp
+     * @return mixed
+     */
     public function timezonify($timestamp)
     {
         return $this->getTime($timestamp);
     }
+
+    /**
+     * Called by the system on runtime, Binds an event to the model to adjust timezones
+     * @throws Exception
+     */
     public static function bootTimezonable()
     {
         if (!property_exists(get_called_class(), 'timezonable')) {

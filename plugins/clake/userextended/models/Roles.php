@@ -56,11 +56,18 @@ class Roles extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * Handles the automated settings of the sort order for roles.
+     */
     public function beforeCreate()
     {
         $this->sort_order = RoleManager::initGroupRolesByCode($this->group->code)->count() + 1;
     }
 
+    /**
+     * Ensures we aren't breaking the existing sort order by saving a sort order that doesn't make sense.
+     * @return bool
+     */
     public function beforeUpdate()
     {
         $total = RoleManager::initGroupRolesByCode($this->group->code)->count();

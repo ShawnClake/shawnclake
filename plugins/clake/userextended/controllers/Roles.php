@@ -36,6 +36,8 @@ class Roles extends Controller
      */
     public function manage()
     {
+        $this->pageTitle = "Manage Roles";
+
         //dd(RoleManager::initGroupRolesByCode('developer')->get());
         $this->vars['groups'] = GroupManager::all()->get();
         $this->vars['selectedGroup'] = GroupManager::all()->get()->first();
@@ -123,6 +125,12 @@ class Roles extends Controller
         ];
     }
 
+    /**
+     * Renders the role management area to the screen
+     * @param $roleCode
+     * @param $groupCode
+     * @return array|void
+     */
     public function renderRole($roleCode, $groupCode)
     {
 
@@ -136,6 +144,12 @@ class Roles extends Controller
         ];
     }
 
+    /**
+     * Renders the role management area toolbar to the screen
+     * @param $roleCode
+     * @param $groupCode
+     * @return array|void
+     */
     public function renderManagementToolbar($roleCode, $groupCode)
     {
         $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
@@ -172,6 +186,10 @@ class Roles extends Controller
         return $this->renderRoles($groupCode);
     }
 
+    /**
+     * AJAX handler called when clicking on a different role to manage it
+     * @return array
+     */
     public function onManageRole()
     {
         $groupCode = post('groupCode');
@@ -179,6 +197,10 @@ class Roles extends Controller
         return array_merge($this->renderRole($roleCode, $groupCode), $this->renderManagementToolbar($roleCode, $groupCode));
     }
 
+    /**
+     * AJAX handler called when hitting the edit role button in the role manager.. Used to edit the role.
+     * @return mixed
+     */
     public function onOpenRole()
     {
         $groupCode = post('groupCode');
@@ -187,6 +209,10 @@ class Roles extends Controller
         return $this->makePartial('update_role_form', ['role' => $role]);
     }
 
+    /**
+     * AJAX handler called to save the role after the user clicks save in the role editor window
+     * @return array
+     */
     public function onSaveRole()
     {
         $groupCode = post('groupCode');
@@ -194,6 +220,7 @@ class Roles extends Controller
         $name = post('name');
         $code = post('code');
         $description = post('description');
+
         $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
         $role->name = $name;
         $role->code = $code;
@@ -211,6 +238,7 @@ class Roles extends Controller
             $roleRender = ['#manage_role' => 'No roles currently exist in this group'];
             $roleToolbarRender = [];
         }
+
         Flash::success('Role successfully saved!');
 
         return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>']);

@@ -4,6 +4,8 @@ use Model;
 use RainLab\User\Models\UserGroup;
 use October\Rain\Database\Traits\Sortable;
 
+use Clake\UserExtended\Traits\Timezonable;
+
 /**
  * UserExtended Model
  */
@@ -11,6 +13,15 @@ class GroupsExtended extends UserGroup
 {
 
     use Sortable;
+
+    use Timezonable;
+
+    protected $timezonable = [
+
+        'created_at',
+        'updated_at'
+
+    ];
 
     /**
      * Used to manually add relations for the user table

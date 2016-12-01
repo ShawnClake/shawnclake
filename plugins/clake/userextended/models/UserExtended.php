@@ -3,11 +3,20 @@
 use Model;
 use RainLab\User\Models\User;
 
+use Clake\UserExtended\Traits\Timezonable;
+
 /**
  * UserExtended Model
  */
 class UserExtended extends User
 {
+
+    protected $timezonable = [
+
+        'created_at',
+        'updated_at'
+
+    ];
 
     /**
      * Used to manually add relations for the user table

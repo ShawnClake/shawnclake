@@ -139,12 +139,20 @@ class RoleManager
         $movingDown->save();
     }
 
+    /**
+     * Sorts the Collection of roles by sort_order and then returns it
+     * @return mixed
+     */
     public function getSorted()
     {
         $this->sort();
         return $this->roles;
     }
 
+    /**
+     * Sorts the Collection of Roles by sort_order
+     * @return $this
+     */
     public function sort()
     {
         $sorted = $this->getGroupRolesByOrdering();
