@@ -38,13 +38,12 @@ class Plugin extends PluginBase
 
             'filters' => [
 
-                'timezonify' => ['Clake\Userextended\Classes\UserUtil', 'twigTimezoneAdjustment'],
+                'timezonify' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigTimezoneAdjustment'],
 
             ],
 
         ];
     }
-
 
     /**
      * Register method, called when the plugin is first registered.
@@ -74,13 +73,13 @@ class Plugin extends PluginBase
                 'groups' => [
                     'label' => 'Group Manager',
                     'url'         => Backend::url('clake/userextended/groupsextended'),
-                    'icon'        => 'icon-user',
+                    'icon'        => 'icon-users',
                     'order'       => 500,
                 ],
                 'roles' => [
                     'label' => 'Role Manager',
                     'url'         => Backend::url('clake/userextended/roles/manage'),
-                    'icon'        => 'icon-user',
+                    'icon'        => 'icon-pencil',
                     'order'       => 600,
                 ],
                 'users-side' => [
@@ -92,44 +91,6 @@ class Plugin extends PluginBase
             ]);
 
         });
-
-        /*Controller::extend(function($controller){
-
-            if(!$controller instanceof \RainLab\User\Controllers\UserGroups)
-                return;
-
-            $controller->reorderConfig = plugins_path('clake/userextended/controllers/groupsextended/config_reorder.yaml');
-
-            $controller->implement[] = 'Backend.Behaviors.ReorderController';
-
-        });*/
-
-
-
-        /*Event::listen('backend.form.extendFields', function($widget) {
-
-            // Only for the User controller
-            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
-                return;
-            }
-
-            // Only for the User model
-            if (!$widget->model instanceof \RainLab\User\Models\User) {
-                return;
-            }
-
-            // Add an extra birthday field
-            $widget->addFields([
-                'birthday' => [
-                    'label'   => 'Birthday',
-                    'comment' => 'Select the users birthday',
-                    'type'    => 'datepicker'
-                ]
-            ]);
-
-            // Remove a Surname field
-            $widget->removeField('surname');
-        });*/
 
         return [];
 
