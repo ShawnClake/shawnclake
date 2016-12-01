@@ -13,7 +13,7 @@ class UserGroupsRemovePrimaryKeys extends Migration
         Schema::table('users_groups', function($table)
         {
             $table->dropPrimary('user_group_id');
-            $table->dropPrimary('user_id');
+            //$table->dropPrimary('user_id');
         });
     }
 
