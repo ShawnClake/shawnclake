@@ -8,45 +8,51 @@ class SeedUserGroupsTable extends Seeder
     public function run()
     {
         UserGroup::create([
-            'name' => 'Admin',
+            'name' => 'Admins',
             'code' => 'admin',
-            'description' => 'Administrator group'
+            'description' => 'Administrator group',
         ]);
 
         UserGroup::create([
-            'name' => 'Friend',
+            'name' => 'Friends',
             'code' => 'friend',
-            'description' => 'Generalized friend group.'
+            'description' => 'Generalized friend group.',
         ]);
 
-        UserGroup::create([
+        /*UserGroup::create([
             'name' => 'Guest',
             'code' => 'guest',
             'description' => 'Generalized guest group.'
-        ]);
+        ]);*/
 
         UserGroup::create([
-            'name' => 'Tester',
+            'name' => 'Testers',
             'code' => 'tester',
-            'description' => 'Access bleeding edge features'
+            'description' => 'Access bleeding edge features',
         ]);
 
         UserGroup::create([
-            'name' => 'Debugger',
+            'name' => 'Debuggers',
             'code' => 'debugger',
-            'description' => 'Debug text, buttons, and visuals appear on the pages'
+            'description' => 'Debug text, buttons, and visuals appear on the pages',
         ]);
 
         UserGroup::create([
-            'name' => 'Developer',
+            'name' => 'Developers',
             'code' => 'developer',
-            'description' => 'Access to the dev tools and options'
+            'description' => 'Access to the dev tools and options',
         ]);
 
         UserGroup::create([
             'name' => 'Banned',
             'code' => 'banned',
-            'description' => 'Banned from viewing pages'
+            'description' => 'Banned from viewing pages',
+        ]);
+
+        UserGroup::create([
+            'name' => 'default',
+            'code' => 'default',
+            'description' => 'Default group for Users',
         ]);
 
     }
