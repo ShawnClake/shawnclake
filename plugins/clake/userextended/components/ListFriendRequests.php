@@ -49,7 +49,7 @@ class ListFriendRequests extends ComponentBase
     {
         $limit = $this->property('maxItems');
 
-        return FriendsManager::listMyReceivedFriendRequests(null, $limit);
+        return FriendsManager::listReceivedFriendRequests(null, $limit);
     }
 
     /**

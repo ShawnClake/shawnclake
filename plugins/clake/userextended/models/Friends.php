@@ -2,7 +2,7 @@
 
 use Clake\UserExtended\Classes\UserUtil;
 use Model;
-use \October\Rain\Database\Traits\SoftDelete;
+use October\Rain\Database\Traits\SoftDelete;
 
 use Clake\UserExtended\Traits\Timezonable;
 
@@ -85,13 +85,24 @@ class Friends extends Model
         return false;
     }
 
+    /**
+     * @param $userIdA
+     * @param null $userIdB
+     * @return bool
+     */
     public static function isRequested($userIdA, $userIdB = null)
     {
+
         if(Friends::request($userIdA, $userIdB)->count() > 0)
             return true;
         return false;
     }
 
+    /**
+     * @param $userIdA
+     * @param null $userIdB
+     * @return bool
+     */
     public static function isDeclined($userIdA, $userIdB = null)
     {
         if(Friends::declined($userIdA, $userIdB)->count() > 0)
@@ -99,6 +110,11 @@ class Friends extends Model
         return false;
     }
 
+    /**
+     * @param $userIdA
+     * @param null $userIdB
+     * @return bool
+     */
     public static function isBlocked($userIdA, $userIdB = null)
     {
         if(Friends::blocked($userIdA, $userIdB)->count() > 0)
@@ -106,7 +122,12 @@ class Friends extends Model
         return false;
     }
 
-    public static function hasRelation($userIdA, $userIdB = null)
+    /**
+     * @param $userIdA
+     * @param null $userIdB
+     * @return bool
+     */
+    public static function isRelationExists($userIdA, $userIdB = null)
     {
         if(Friends::relation($userIdA, $userIdB)->count() > 0)
             return true;
@@ -128,11 +149,11 @@ class Friends extends Model
         if($userIdB == null)
             return $query;
 
-        return $query->where(function ($query, $userIdA, $userIdB) {
+        return $query->where(function ($query) use($userIdA, $userIdB){
             $query->where('user_that_sent_request', $userIdA)
                 ->where('user_that_accepted_request', $userIdB)
                 ->where('accepted', '1');
-        })->orWhere(function ($query, $userIdA, $userIdB) {
+        })->orWhere(function ($query) use($userIdA, $userIdB){
             $query->where('user_that_sent_request', $userIdB)
                 ->where('user_that_accepted_request', $userIdA)
                 ->where('accepted', '1');
@@ -155,11 +176,11 @@ class Friends extends Model
         if($userIdB == null)
             return $query;
 
-        return $query->where(function ($query, $userIdA, $userIdB) {
+        return $query->where(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdA)
                 ->where('user_that_accepted_request', $userIdB)
                 ->where('accepted', '0');
-        })->orWhere(function ($query, $userIdA, $userIdB) {
+        })->orWhere(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdB)
                 ->where('user_that_accepted_request', $userIdA)
                 ->where('accepted', '0');
@@ -182,11 +203,11 @@ class Friends extends Model
         if($userIdB == null)
             return $query;
 
-        return $query->where(function ($query, $userIdA, $userIdB) {
+        return $query->where(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdA)
                 ->where('user_that_accepted_request', $userIdB)
                 ->where('accepted', '2');
-        })->orWhere(function ($query, $userIdA, $userIdB) {
+        })->orWhere(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdB)
                 ->where('user_that_accepted_request', $userIdA)
                 ->where('accepted', '2');
@@ -207,11 +228,11 @@ class Friends extends Model
         if($userIdB == null)
             return $query;
 
-        return $query->where(function ($query, $userIdA, $userIdB) {
+        return $query->where(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdA)
                 ->where('user_that_accepted_request', $userIdB)
                 ->where('accepted', '3');
-        })->orWhere(function ($query, $userIdA, $userIdB) {
+        })->orWhere(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdB)
                 ->where('user_that_accepted_request', $userIdA)
                 ->where('accepted', '3');
@@ -231,10 +252,10 @@ class Friends extends Model
         if($userIdB == null)
             return $query;
 
-        return $query->where(function ($query, $userIdA, $userIdB) {
+        return $query->where(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdA)
                 ->where('user_that_accepted_request', $userIdB);
-        })->orWhere(function ($query, $userIdA, $userIdB) {
+        })->orWhere(function ($query) use($userIdA, $userIdB) {
             $query->where('user_that_sent_request', $userIdB)
                 ->where('user_that_accepted_request', $userIdA);
         });
@@ -282,25 +303,32 @@ class Friends extends Model
         if($userId == null)
             return $query;
 
-        return $query->where(function ($query, $userId) {
+        return $query->where(function ($query) use ($userId){
             $query->where('user_that_sent_request', $userId)
                 ->where('accepted', '1');
-        })->orWhere(function ($query, $userId) {
+        })->orWhere(function ($query) use ($userId) {
                 $query->where('user_that_accepted_request', $userId)
                 ->where('accepted', '1');
         });
+
     }
 
+    /**
+     * Scopes to users who are 'blocked' from each other
+     * @param $query
+     * @param null $userId
+     * @return mixed
+     */
     public function scopeBlocks($query, $userId = null)
     {
         $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
         if($userId == null)
             return $query;
 
-        return $query->where(function ($query, $userId) {
+        return $query->where(function ($query) use ($userId) {
             $query->where('user_that_sent_request', $userId)
                 ->where('accepted', '3');
-        })->orWhere(function ($query, $userId) {
+        })->orWhere(function ($query) use ($userId) {
             $query->where('user_that_accepted_request', $userId)
                 ->where('accepted', '3');
         });
@@ -397,6 +425,24 @@ class Friends extends Model
     public function setStatus($status)
     {
         $this->accepted = $status;
+    }
+
+    public function scopeNotMe($query)
+    {
+        $userId = UserUtil::getUsersIdElseLoggedInUsersId();
+        if($userId == null)
+            return $query;
+
+        $testa = $query;
+        $testb = $query;
+
+        $sender = $testa->pluck('user_that_sent_request');
+        $receiver = $testb->pluck('user_that_accepted_request');
+
+        if($sender === UserUtil::getUsersIdElseLoggedInUsersId())
+            return $query->pluck('user_that_accepted_request');
+
+        return $query->pluck('user_that_sent_request');
     }
 
 }

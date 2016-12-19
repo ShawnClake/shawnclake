@@ -1,6 +1,8 @@
 <?php namespace Clake\Userextended\Components;
 
 use Clake\UserExtended\Classes\UserManager;
+use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\UserExtended;
 use Cms\Classes\ComponentBase;
 
 /**
@@ -31,7 +33,9 @@ class UserSearch extends ComponentBase
     {
         $phrase = post('phrase');
 
-        $results = UserManager::searchUsers($phrase);
+        //$results = UserManager::searchUsers($phrase);
+
+        $results = UserUtil::searchUsers($phrase);
 
         return $this->renderResults($results);
     }

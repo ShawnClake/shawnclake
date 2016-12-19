@@ -146,7 +146,9 @@ class UserUtil
 
     public static function searchUsers($phrase)
     {
-        return UserExtended::search($phrase);
+        $results = new UserExtended();
+
+        return $results->search($phrase);
     }
 
     /**
@@ -178,6 +180,14 @@ class UserUtil
             return null;
 
         return self::getUser($id);
+    }
+
+    public static function idIsLoggedIn($userId)
+    {
+        $user = self::getLoggedInUser();
+        if($user == null)
+            return;
+        return $user->id == $userId;
     }
 
 }

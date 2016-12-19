@@ -45,10 +45,9 @@ class FriendsManager
 
         $requests = Friends::friendRequests()->take($limit)->get();
 
-        foreach ($requests as $userId) {
-            $users->push(UserUtil::getUser($userId));
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->pluckSender()));
         }
-
         return $users;
 
     }
@@ -82,7 +81,8 @@ class FriendsManager
 
         $relation = Friends::friend($friendUserID)->first();
 
-        $relation->delete();
+        // Soft deletes arent working for some reason
+        $relation->forceDelete();
 
 
     }
@@ -129,10 +129,13 @@ class FriendsManager
 
         $request->accepted = 0;*/
 
+        if(UserUtil::idIsLoggedIn($friendUserID))
+            return;
+
         if(self::isFriend($friendUserID))
             return;
 
-        if(Friends::hasRelation($friendUserID) && !Friends::isDeclined($friendUserID))
+        if(Friends::isRelationExists($friendUserID) && !Friends::isDeclined($friendUserID))
             return;
 
         if(Friends::isDeclined($friendUserID))
@@ -276,16 +279,16 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friends::friendRequests()->take($limit)->get();
+        $requests = Friends::friendRequests(null)->take($limit)->get();
 
-        foreach ($requests as $userId) {
-            $users->push(UserUtil::getUser($userId));
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->id));
         }
 
-        $requests = Friends::sentRequests()->take($limit)->get();
+        $requests = Friends::sentRequests(null)->take($limit)->get();
 
-        foreach ($requests as $userId) {
-            $users->push(UserUtil::getUser($userId));
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->id));
         }
 
         $users = $users->shuffle();
@@ -349,8 +352,14 @@ class FriendsManager
 
         $requests = Friends::friends()->get();
 
-        foreach ($requests as $userId) {
-            $users->push(UserUtil::getUser($userId));
+        if($requests->isEmpty())
+        {
+            return $users;
+        }
+
+
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->notMe()));
         }
 
         $users = $users->shuffle();
@@ -404,7 +413,7 @@ class FriendsManager
 
         return $users;*/
 
-        return self::listFriends(0);
+        return self::listFriends();
     }
 
 }

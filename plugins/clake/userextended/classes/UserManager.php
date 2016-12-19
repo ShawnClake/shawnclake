@@ -34,20 +34,25 @@ class UserManager
 
         $users = User::all()->random($limit);
 
-        $friends = FriendsManager::getAll();
+        $friends = FriendsManager::getAllFriends();
 
         foreach($users as $user)
         {
 
             $userAdd = true;
 
-            foreach($friends as $friend)
+            if(!$friends->isEmpty())
             {
 
-                if($user->id == $friend->id)
+                foreach($friends as $friend)
                 {
-                    $userAdd = false;
-                    break;
+
+                    if($user->id == $friend->id)
+                    {
+                        $userAdd = false;
+                        break;
+                    }
+
                 }
 
             }

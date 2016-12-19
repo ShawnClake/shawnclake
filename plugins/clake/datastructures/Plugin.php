@@ -17,7 +17,7 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Data Structures',
+            'name'        => 'DataStructures',
             'description' => 'Data structures and components which utilize them!',
             'author'      => 'clake',
             'icon'        => 'icon-leaf'

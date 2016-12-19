@@ -16,9 +16,9 @@ use Exception;
 trait Searchable
 {
 
-    public static function search($phrase)
+    public function search($phrase)
     {
-        $searchable = self::getSearchableAttributes();
+        $searchable = $this->getSearchableAttributes();
 
         $results = Lists::create();
 
@@ -40,7 +40,7 @@ trait Searchable
      * Called by the system on runtime, Binds an event to the model to adjust timezones
      * @throws Exception
      */
-    public static function bootTimezonable()
+    public static function bootSearchable()
     {
         if (!property_exists(get_called_class(), 'searchable')) {
             throw new Exception(sprintf(
