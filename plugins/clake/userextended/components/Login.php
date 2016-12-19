@@ -2,6 +2,14 @@
 
 use Cms\Classes\ComponentBase;
 
+/**
+ * TODO: Finish component
+ */
+
+/**
+ * Class Login
+ * @package Clake\Userextended\Components
+ */
 class Login extends ComponentBase
 {
 

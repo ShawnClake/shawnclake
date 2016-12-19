@@ -3,6 +3,14 @@
 use Clake\UserExtended\Classes\UserManager;
 use Cms\Classes\ComponentBase;
 
+/**
+ * TODO: Add better error checking as well as better support for custom partials
+ */
+
+/**
+ * Class UserSearch
+ * @package Clake\Userextended\Components
+ */
 class UserSearch extends ComponentBase
 {
 

@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use October\Rain\Parse\Yaml;
 
 /**
+ * TODO: Cleanup this class
+ * TODO: Finish this class
+ * TODO: Enforce conventions, SRP, and function usage
+ */
+
+/**
  * Class UserSettingsManager
  * @package Clake\UserExtended\Classes
  */
