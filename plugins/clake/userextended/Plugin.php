@@ -4,6 +4,12 @@ use Backend\Classes\Controller;
 use System\Classes\PluginBase;
 use Event;
 use Backend;
+
+/**
+ * TODO: Improve readability, documentation, component names and other
+ * TODO: Add data-structures dependency
+ */
+
 /**
  * UserExtended Plugin Information File
  */
@@ -11,7 +17,10 @@ class Plugin extends PluginBase
 {
 
 
-    public $require = ['RainLab.User'];
+    public $require = [
+        'RainLab.User',
+        'Clake.DataStructures'
+    ];
 
     /**
      * Returns information about this plugin.
