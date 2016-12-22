@@ -23,12 +23,6 @@ class Plugin extends PluginBase
     ];
 
     /**
-     * Activates test mode
-     * @var bool
-     */
-    public $testMode = false;
-
-    /**
      * Returns information about this plugin.
      *
      * @return array
@@ -79,14 +73,6 @@ class Plugin extends PluginBase
     {
 
         /**
-         * Calls test method which activates test drivers. Only enable when needed
-         */
-
-        if($this->testMode)
-            $this->test();
-
-
-        /**
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
         Event::listen('backend.menu.extendItems', function($manager) {
@@ -118,19 +104,6 @@ class Plugin extends PluginBase
 
     }
 
-    public function test()
-    {
-        $tests = [
-            'Clake\UserExtended\Tests\TestUserSettingsManager'
-        ];
-
-        foreach($tests as $test)
-        {
-            $class = new $test;
-            $class::test();
-        }
-    }
-
     /**
      * Registers any front-end components implemented in this plugin.
      *
@@ -147,6 +120,7 @@ class Plugin extends PluginBase
             'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
             'Clake\UserExtended\Components\UserSearch' => 'usersearch',
             'Clake\UserExtended\Components\UserUI' => 'userui',
+            'Clake\UserExtended\Components\Settings' => 'settings',
         ];
     }
 
