@@ -16,7 +16,8 @@ class TestUserSettingsManager
         $setit = UserSettingsManager::init()->setSetting('address', 'moron road')->save();
         $getit = UserSettingsManager::init()->getSetting('address');
         $user = UserSettingsManager::init()->userCheck();
-        dd($settings);
+        var_dump($settings);
+        return [true, var_export($settings, true)];
     }
 
 }
