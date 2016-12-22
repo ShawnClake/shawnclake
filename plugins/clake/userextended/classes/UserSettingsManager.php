@@ -8,22 +8,29 @@ use Illuminate\Support\Facades\Validator;
 use \October\Rain\Support\Facades\Yaml;
 
 /**
- * TODO: Cleanup this class
- * TODO: Finish this class
- * TODO: Enforce conventions, SRP, and function usage
- */
-
-/**
  * Class UserSettingsManager
  * @package Clake\UserExtended\Classes
+ *
+ * Terminology and flow:
+ *   A user has many settings.
+ *   A setting has many finite options.
+ *   Options have default values below.
+ *   A setting has a value.
+ *   An option has a state.
  */
 class UserSettingsManager
 {
 
+    // Settings config file
     protected $settingsTemplate = [];
+
+    // Settings column from the user object
     protected $settings;
+
+    // Stores the user object
     protected $user = null;
 
+    // Default options for settings
     private $defaults = [
         'label' => '',
         'type' => 'text',
@@ -60,16 +67,28 @@ class UserSettingsManager
         return $instance;
     }
 
+    /**
+     * Returns the user settings on the user instance
+     * @return mixed
+     */
     public function userSettingsCheck()
     {
         return $this->settings;
     }
 
+    /**
+     * Returns the config file contents
+     * @return array
+     */
     public function yamlCheck()
     {
         return $this->settingsTemplate;
     }
 
+    /**
+     * Returns the user instance
+     * @return null
+     */
     public function userCheck()
     {
         return $this->user;
@@ -160,7 +179,12 @@ class UserSettingsManager
             $value = '';
 
             if(isset($this->settings[$key]))
+            {
                 $value = $this->settings[$key];
+                if($this->isEncrypted($key))
+                    $value = $this->decrypt($key, $value);
+            }
+
 
             $settings[$key] = [$value, 'options' => $options];
         }
@@ -169,7 +193,7 @@ class UserSettingsManager
     }
 
     /**
-     * Returns whether or not a setting is read only or editable
+     * Returns whether or not a setting should exist on an update form page
      * @param $setting
      * @return bool
      */
@@ -177,6 +201,28 @@ class UserSettingsManager
     {
         $options = $this->getSettingOptions($setting);
         return $options['editable'];
+    }
+
+    /**
+     * Returns whether or not a setting can be updated or created, Overrides both editable and registerable
+     * @param $setting
+     * @return mixed
+     */
+    public function isCreateable($setting)
+    {
+        $options = $this->getSettingOptions($setting);
+        return $options['createable'];
+    }
+
+    /**
+     * Returns whether a setting should exist on a sign up form
+     * @param $setting
+     * @return mixed
+     */
+    public function isRegisterable($setting)
+    {
+        $options = $this->getSettingOptions($setting);
+        return $options['registerable'];
     }
 
     /**
@@ -244,7 +290,7 @@ class UserSettingsManager
     }
 
     /**
-     * Returns th decrypted version of the passed value
+     * Returns the decrypted version of the passed value
      * It will return the value if encryption is not required
      * @param $setting
      * @param $value
@@ -268,9 +314,6 @@ class UserSettingsManager
      */
     public function setSetting($setting, $value)
     {
-        if(!($this->isEditable($setting)))
-            return false;
-
         if(!$this->validate($setting, $value))
             return false;
 
@@ -298,6 +341,72 @@ class UserSettingsManager
     {
         UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
         return $this;
+    }
+
+    /**
+     * Returns an array of setting values and options for each setting marked with the option 'editable'
+     * @return array
+     */
+    public function getUpdateable()
+    {
+        $settings = [];
+
+        foreach($this->settingsTemplate as $key=>$setting)
+        {
+            if(!$this->isCreateable($key))
+                continue;
+
+            if(!$this->isEditable($key))
+                continue;
+
+            $options = $this->getSettingOptions($key);
+
+            $value = '';
+
+            if(isset($this->settings[$key]))
+            {
+                $value = $this->settings[$key];
+                if($this->isEncrypted($key))
+                    $value = $this->decrypt($key, $value);
+            }
+
+            $settings[$key] = [$value, 'options' => $options];
+        }
+
+        return $settings;
+    }
+
+    /**
+     * Returns an array of setting values and options for each setting marked with the option 'registerable'
+     * @return array
+     */
+    public function getRegisterable()
+    {
+        $settings = [];
+
+        foreach($this->settingsTemplate as $key=>$setting)
+        {
+            if(!$this->isCreateable($key))
+                continue;
+
+            if(!$this->isRegisterable($key))
+                continue;
+
+            $options = $this->getSettingOptions($key);
+
+            $value = '';
+
+            if(isset($this->settings[$key]))
+            {
+                $value = $this->settings[$key];
+                if($this->isEncrypted($key))
+                    $value = $this->decrypt($key, $value);
+            }
+
+            $settings[$key] = [$value, 'options' => $options];
+        }
+
+        return $settings;
     }
 
 
