@@ -5,7 +5,7 @@ namespace Clake\UserExtended\Classes;
 use Clake\Userextended\Models\UserExtended;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
-use October\Rain\Parse\Yaml;
+use \October\Rain\Support\Facades\Yaml;
 
 /**
  * TODO: Cleanup this class
@@ -21,7 +21,7 @@ class UserSettingsManager
 {
 
     protected $settingsTemplate = [];
-    protected $settings = [];
+    protected $settings;
     protected $user = null;
 
     private $defaults = [
@@ -30,7 +30,7 @@ class UserSettingsManager
         'validation' => '',
         'editable' => true,
         'createable' => true,
-        'registerable' => true,
+        'registerable' => false,
         'encrypt' => false,
     ];
 
@@ -51,13 +51,28 @@ class UserSettingsManager
             return null;
 
         if($user == null)
-            $user = UserUtil::castToUserExtendedUser(UserUtil::getLoggedInUser());
+            $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
 
         $instance->user = $user;
 
         $instance->settings = $instance->user->settings;
 
         return $instance;
+    }
+
+    public function userSettingsCheck()
+    {
+        return $this->settings;
+    }
+
+    public function yamlCheck()
+    {
+        return $this->settingsTemplate;
+    }
+
+    public function userCheck()
+    {
+        return $this->user;
     }
 
     /**
@@ -78,7 +93,7 @@ class UserSettingsManager
     public function getSettingOptions($setting)
     {
         if(!$this->isSetting($setting))
-            return;
+            return false;
 
         $options = $this->settingsTemplate[$setting];
 
@@ -138,16 +153,16 @@ class UserSettingsManager
     {
         $settings = [];
 
-        foreach($this->settingsTemplate as $setting)
+        foreach($this->settingsTemplate as $key=>$setting)
         {
-            $options = $this->getSettingOptions($setting);
+            $options = $this->getSettingOptions($key);
 
             $value = '';
 
-            if(isset($this->settings[$setting]))
-                $value = $this->settings[$setting];
+            if(isset($this->settings[$key]))
+                $value = $this->settings[$key];
 
-            $settings[$setting] = [$value, 'options' => $options];
+            $settings[$key] = [$value, 'options' => $options];
         }
 
         return $settings;
@@ -161,7 +176,7 @@ class UserSettingsManager
     public function isEditable($setting)
     {
         $options = $this->getSettingOptions($setting);
-        return $options['editable'] && $options['editable'] != 'false';
+        return $options['editable'];
     }
 
     /**
@@ -172,7 +187,7 @@ class UserSettingsManager
     public function isValidated($setting)
     {
         $options = $this->getSettingOptions($setting);
-        return $options['validation'] != '';
+        return $options['validation'] != '' && isset($options['validation']);
     }
 
     /**
@@ -183,7 +198,7 @@ class UserSettingsManager
     public function isEncrypted($setting)
     {
         $options = $this->getSettingOptions($setting);
-        return $options['encrypt'] && $options['encrypt'] != 'false';
+        return $options['encrypt'];
     }
 
     /**
@@ -259,7 +274,16 @@ class UserSettingsManager
         if(!$this->validate($setting, $value))
             return false;
 
+
         $value = $this->encrypt($setting, $value);
+
+        //dd(empty($this->settings));
+        //$test = is_null($this->settings) ? "hi" : $this->settingsTemplate;
+        //$test = array_key_exists($setting, $this->settings);
+        //dd($test);
+
+        if($this->settings == "Array" || is_null($this->settings) || empty($this->settings))
+            $this->settings = [];
 
         $this->settings[$setting] = $value;
 
@@ -272,8 +296,7 @@ class UserSettingsManager
      */
     public function save()
     {
-        $this->user->settings = $this->settings;
-        $this->user->save();
+        UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
         return $this;
     }
 
