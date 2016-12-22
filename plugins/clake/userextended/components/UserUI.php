@@ -47,8 +47,6 @@ class UserUI extends ComponentBase
      */
     public function user()
     {
-        $this->test();
-
         $userid = $this->property('user');
 
         return UserUtil::getRainlabUser($userid);
@@ -128,22 +126,7 @@ class UserUI extends ComponentBase
     public function roles()
     {
         //$roles = UserRoleManager::currentUser()->all()->promote('developer');
-
-
         return json_encode(UserRoleManager::currentUser()->all()->get());
-    }
-
-    public function test()
-    {
-        $tests = [
-            'Clake\UserExtended\Tests\TestUserSettingsManager'
-        ];
-
-        foreach($tests as $test)
-        {
-            $class = new $test;
-            $class::test();
-        }
     }
 
 }
