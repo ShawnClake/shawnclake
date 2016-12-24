@@ -1,0 +1,16 @@
+<h1>Test Results:</h1>
+{% set globaltests = true %}
+{% for drivername, result in unittests.results %}
+
+    <h3>{% if result[0] %}[Success]{% else %}{% set globaltests = false %}[Failed]{% endif %} Testing {{drivername}}...</h3>
+    <div>
+        {{result[1]|raw}}
+    </div>
+
+{% endfor %}
+
+{% if globaltests %}
+<h2>All tests passed successfully</h2>
+{% else %}
+<h2>Some tests failed with errors. Please see above.</h2>
+{% endif %}

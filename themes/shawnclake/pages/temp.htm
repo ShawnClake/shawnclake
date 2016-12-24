@@ -1,0 +1,11 @@
+title = "Temp"
+url = "/temp"
+layout = "home"
+description = "Temp page"
+is_hidden = 0
+
+[Clake\UserExtended\Components\Account account]
+==
+{% component 'account' %}
+
+{% partial __SELF__~"::login" %}
