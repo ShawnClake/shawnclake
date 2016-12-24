@@ -1,14 +1,14 @@
-<?php namespace Clake\UserExtended\Components;
+<?php namespace Clake\Userextended\Components;
 
 use Cms\Classes\ComponentBase;
 
-class Register extends ComponentBase
+class User extends ComponentBase
 {
 
     public function componentDetails()
     {
         return [
-            'name'        => 'Register Component',
+            'name'        => 'User Component',
             'description' => 'No description provided yet...'
         ];
     }

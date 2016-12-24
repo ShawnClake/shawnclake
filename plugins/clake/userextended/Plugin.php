@@ -121,6 +121,7 @@ class Plugin extends PluginBase
             'Clake\UserExtended\Components\UserSearch' => 'usersearch',
             'Clake\UserExtended\Components\UserUI' => 'userui',
             'Clake\UserExtended\Components\Settings' => 'settings',
+            'Clake\UserExtended\Components\Account' => 'account',
         ];
     }
 

@@ -58,7 +58,14 @@ class UserSettingsManager
             return null;
 
         if($user == null)
-            $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
+        {
+            $user = UserUtil::getLoggedInUser();
+
+            if(!$user == null)
+                $user = UserUtil::convertToUserExtendedUser($user);
+            else
+                return $instance;
+        }
 
         $instance->user = $user;
 
@@ -394,24 +401,10 @@ class UserSettingsManager
 
             $options = $this->getSettingOptions($key);
 
-            $value = '';
-
-            if(isset($this->settings[$key]))
-            {
-                $value = $this->settings[$key];
-                if($this->isEncrypted($key))
-                    $value = $this->decrypt($key, $value);
-            }
-
-            $settings[$key] = [$value, 'options' => $options];
+            $settings[$key] = ['options' => $options];
         }
 
         return $settings;
     }
-
-
-
-
-
 
 }

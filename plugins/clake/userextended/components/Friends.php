@@ -2,21 +2,13 @@
 
 use Cms\Classes\ComponentBase;
 
-/**
- * TODO: Finish component
- */
-
-/**
- * Class Login
- * @package Clake\Userextended\Components
- */
-class Login extends ComponentBase
+class Friends extends ComponentBase
 {
 
     public function componentDetails()
     {
         return [
-            'name'        => 'Login Component',
+            'name'        => 'Friends Component',
             'description' => 'No description provided yet...'
         ];
     }
