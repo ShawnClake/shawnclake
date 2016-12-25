@@ -229,6 +229,27 @@ class FriendsManager
     }
 
     /**
+     * Sets the relation between two users to blocked. Creates a new one if one already exists
+     * @param $friendUserID
+     */
+    public static function blockFriend($friendUserID)
+    {
+        if(!Friends::isBlocked($friendUserID))
+            return;
+
+        if(Friends::isRelationExists($friendUserID))
+            $relation = Friends::relation($friendUserID)->first();
+        else
+            $relation = new Friends();
+
+        $relation->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserID);
+
+        $relation->setStatus(3);
+
+        $relation->save();
+    }
+
+    /**
      * Returns a list of both sent and received friend requests for the logged in user
      * @param int $limit
      * @return Collection|static
@@ -300,10 +321,11 @@ class FriendsManager
 
     /**
      * Returns the list of friends for the logged in user with a limit
-     * @param $limit
+     * @param int $limit
+     * @param null $userId
      * @return Collection|static
      */
-    public static function listFriends($limit = 0)
+    public static function listFriends($limit = 0, $userId = null)
     {
 
         /*$userid = self::getLoggedInUser()->id;
@@ -350,7 +372,7 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friends::friends()->get();
+        $requests = Friends::friends($userId)->get();
 
         if($requests->isEmpty())
         {
@@ -359,7 +381,7 @@ class FriendsManager
 
 
         foreach ($requests as $user) {
-            $users->push(UserUtil::getUser($user->notMe()));
+            $users->push(UserUtil::getUser($user->notMe($userId)));
         }
 
         $users = $users->shuffle();
@@ -372,10 +394,10 @@ class FriendsManager
 
     /**
      * Returns all friends for the logged in user
-     *
-     * @return Collection
+     * @param null $userId
+     * @return FriendsManager|Collection
      */
-    public static function getAllFriends()
+    public static function getAllFriends($userId = null)
     {
         /*$userid = self::getLoggedInUser()->id;
 
@@ -413,7 +435,7 @@ class FriendsManager
 
         return $users;*/
 
-        return self::listFriends();
+        return self::listFriends(0, $userId);
     }
 
 }
