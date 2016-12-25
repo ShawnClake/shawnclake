@@ -70,4 +70,6 @@ class ListFriends extends ComponentBase
             FriendsManager::deleteFriend($userid);
     }
 
+
+
 }
