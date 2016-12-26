@@ -18,7 +18,7 @@ class UserList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'User list',
+            'name'        => 'DEPRECIATED. User list',
             'description' => 'Provides an interface for listing users'
         ];
     }
@@ -76,11 +76,8 @@ class UserList extends ComponentBase
      */
     public function onFriendUser()
     {
-
-        $userid = post('id');
-
-        FriendsManager::sendFriendRequest($userid);
-
+        $friend = new Friends();
+        $friend->onRequest();
     }
 
 }

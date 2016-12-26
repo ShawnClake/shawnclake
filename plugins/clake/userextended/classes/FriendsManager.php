@@ -379,9 +379,8 @@ class FriendsManager
             return $users;
         }
 
-
         foreach ($requests as $user) {
-            $users->push(UserUtil::getUser($user->notMe($userId)));
+            $users->push(UserUtil::getUser($user->otherUser($userId)));
         }
 
         $users = $users->shuffle();

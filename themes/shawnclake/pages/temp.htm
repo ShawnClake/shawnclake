@@ -1,11 +1,13 @@
 title = "Temp"
-url = "/temp"
+url = "/temp/:user?|^[0-9]+$"
 layout = "home"
 description = "Temp page"
 is_hidden = 0
 
-[Clake\UserExtended\Components\Account account]
+[friends]
+type = "requests"
+maxItems = 5
+paramCode = "{{ :user }}"
+profilePage = "users"
 ==
-{% component 'account' %}
-
-{% partial __SELF__~"::login" %}
+{% component 'friends' %}

@@ -3,7 +3,7 @@
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\FriendsManager;
 use Page;
-use Illuminate\Support\Facades\Redirect;
+
 
 class Friends extends ComponentBase
 {
@@ -64,7 +64,8 @@ class Friends extends ComponentBase
      */
     public function getProfilePageOptions()
     {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+        $user = new User();
+        return $user->getProfilePageOptions();
     }
 
     /**
@@ -117,19 +118,10 @@ class Friends extends ComponentBase
             FriendsManager::blockFriend($userid);
     }
 
-    /**
-     * AJAX handler to visit profiles
-     * @return mixed
-     */
     public function onVisitProfile()
     {
-        $userid = post('id');
-
-        if($userid != null)
-        {
-            $url = $this->property('profilePage') . "/" . $userid;
-            return Redirect::intended($url);
-        }
+        $user = new User();
+        return $user->onVisitProfile($this->property('profilePage'));
     }
 
     /**
@@ -168,6 +160,13 @@ class Friends extends ComponentBase
 
         if($userid != null)
             FriendsManager::declineRequest($userid);
+    }
+
+    public function onRequest()
+    {
+        $userId = post('id');
+
+        FriendsManager::sendFriendRequest($userId);
     }
 
 }

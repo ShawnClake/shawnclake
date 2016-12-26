@@ -445,4 +445,17 @@ class Friends extends Model
         return $query->pluck('user_that_sent_request');
     }
 
+    public function otherUser($userId = null)
+    {
+        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
+        if($userId == null)
+            return;
+
+        if($this->user_that_sent_request == $userId)
+            return $this->user_that_accepted_request;
+        else
+            return $this->user_that_sent_request;
+
+    }
+
 }
