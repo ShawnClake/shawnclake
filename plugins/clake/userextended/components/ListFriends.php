@@ -11,6 +11,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class ListFriends
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.Friends
  */
 class ListFriends extends ComponentBase
 {

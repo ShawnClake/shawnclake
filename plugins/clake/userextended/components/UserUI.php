@@ -15,6 +15,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class UserUI
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserUI extends ComponentBase
 {
