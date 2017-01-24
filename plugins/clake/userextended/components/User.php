@@ -10,6 +10,10 @@ use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class User
+ * @package Clake\Userextended\Components
+ */
 class User extends ComponentBase
 {
 
@@ -81,7 +85,7 @@ class User extends ComponentBase
      */
     public function onRun()
     {
-        $this->page['groups'] = UserGroupManager::CurrentUser()->All()->Get();
+        $this->page['groups'] = UserGroupManager::currentUser()->all()->getUserGroups();
     }
 
     /**

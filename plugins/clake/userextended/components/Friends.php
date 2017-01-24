@@ -4,7 +4,10 @@ use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\FriendsManager;
 use Page;
 
-
+/**
+ * Class Friends
+ * @package Clake\Userextended\Components
+ */
 class Friends extends ComponentBase
 {
 
