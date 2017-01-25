@@ -11,6 +11,7 @@ use Clake\UserExtended\Classes\UserGroupManager;
 /**
  * Class UserGroups
  * @package Clake\UserExtended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserGroups extends ComponentBase
 {

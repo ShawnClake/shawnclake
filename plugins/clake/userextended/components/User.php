@@ -6,6 +6,7 @@ use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\Settings;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
 use Illuminate\Support\Facades\Redirect;
@@ -113,6 +114,10 @@ class User extends ComponentBase
         $friend->onRequest();
     }
 
+    /**
+     * Returns a user by ID specified in the component, or the logged in user if one is not specified
+     * @return mixed
+     */
     public function singleUser()
     {
 
@@ -126,6 +131,10 @@ class User extends ComponentBase
         return UserUtil::convertToUserExtendedUser($user);
     }
 
+    /**
+     * Searches for users based on a page field called 'phrase'
+     * @return array
+     */
     public function onSearch()
     {
         $phrase = post('phrase');
@@ -135,6 +144,11 @@ class User extends ComponentBase
         return $this->renderResults($results);
     }
 
+    /**
+     * Renders a search results partial.
+     * @param $results
+     * @return array
+     */
     private function renderResults($results)
     {
         $content = $this->renderPartial('user::search-results.htm', ['results' => $results]);
@@ -202,6 +216,10 @@ class User extends ComponentBase
         return $this->renderComments($this->comments());
     }
 
+    /**
+     * AJAX handler for when deleting a comment
+     * @return array
+     */
     public function onDeleteComment()
     {
         $commentid = post('commentid');
@@ -234,6 +252,9 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null)
     {
+        if(!Settings::get('enable_profiles', true))
+            return false;
+
         $userid = post('id');
 
         if($userid != null)

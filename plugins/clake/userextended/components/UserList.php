@@ -11,6 +11,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class UserList
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserList extends ComponentBase
 {

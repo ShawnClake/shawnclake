@@ -13,6 +13,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class ListFriendRequests
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.Friends
  */
 class ListFriendRequests extends ComponentBase
 {

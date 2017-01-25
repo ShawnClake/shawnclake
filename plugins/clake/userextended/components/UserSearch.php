@@ -12,6 +12,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class UserSearch
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserSearch extends ComponentBase
 {
