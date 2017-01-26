@@ -3,7 +3,6 @@ description = "The home layout"
 [session]
 security = "all"
 
-[usergroups]
 ==
 <?php
 function onStart()
@@ -14,7 +13,7 @@ function onStart()
 //Event::fire('look.auditmanager.audit', [$type, $source, $data]);
 //Event::fire('look.notificationmanager.trigger', ["dev.test", "2", "3", "LobsterCake"]);
 //echo Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->IsInGroup("aDMins");
-$this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->Get();
+//$this['GROUPS'] = Clake\UserExtended\Classes\UserGroupManager::CurrentUser()->All()->Get();
 }
 ?>
 ==
