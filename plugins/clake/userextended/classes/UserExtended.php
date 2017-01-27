@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Clake\UserExtended\Classes;
 
 /**
@@ -16,6 +15,7 @@ namespace Clake\UserExtended\Classes;
  * In order to add your module to the module registry you must create an instance of your extensible class
  * on run inside of your plugin's plugin.php
  *
+ * @method static UserExtended register()
  * @package Clake\UserExtended\Classes
  */
 abstract class UserExtended extends Module
@@ -45,6 +45,12 @@ abstract class UserExtended extends Module
      * @var array
      */
     private static $lang = [];
+
+    /**
+     * Called after all the modules are loaded.
+     * @return mixed
+     */
+    public abstract function initialize();
 
     /**
      * Override with an array to inject components into UserExtended
@@ -89,6 +95,11 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Allows us to use a factory pattern for registering modules. IE. syntax becomes ModuleClass::register(); instead of $module = new ModuleClass();
+     */
+    public function registerFactory() {}
+
+    /**
      * UserExtended constructor.
      * This will return false if the child class doesn't have the required class properties
      * This will then register the module and inject what the modules specifies to inject.
@@ -98,13 +109,13 @@ abstract class UserExtended extends Module
         if(empty($this->name) || empty($this->author) || empty($this->description) || empty($this->version))
             return false;
 
-        $this->register();
+        $this->registerModule();
 
-        self::$components[] = $this->injectComponents();
+        $this->inject();
 
-        self::$navigation[] = $this->injectNavigation();
+        $this->fixDuplicates();
 
-        self::$lang[] = $this->injectLang();
+        $this->initializeModules();
     }
 
     /**
@@ -112,7 +123,7 @@ abstract class UserExtended extends Module
      * The module registry has the format:
      *      [moduleName=>moduleRecord]
      */
-    public function register()
+    private function registerModule()
     {
         $module = new Module();
         $module->name = $this->name;
@@ -122,6 +133,63 @@ abstract class UserExtended extends Module
         $module->visible = $this->visible;
         $module->instance = $this;
         self::$modules[$this->name] = $module;
+    }
+
+    /**
+     * Preforms the module injection
+     */
+    private function inject()
+    {
+        self::$components = array_merge(self::$components, $this->injectComponents());
+
+        self::$navigation = array_merge(self::$navigation, $this->injectNavigation());
+
+        self::$lang = array_merge(self::$lang, $this->injectLang());
+    }
+
+    /**
+     * Renames component codes in the case that several components are injected with the same component code.
+     * This helps to avoid the 'duplicate component' error.
+     * If 4 components have the same code ( userSettings ), the 4 components, in order of registration, will have the following codes:
+     * 1) userSettings
+     * 2) userSettingsClassName   where ClassName is the class name of the component
+     * 3) userSettingsClassName1
+     * 4) userSettingsClassName2
+     * It will continue to append an increasing number for any further tie breakers.
+     */
+    private function fixDuplicates()
+    {
+        if(empty(self::$components))
+            return;
+
+        $fixed = [];
+        $dupeCount = 0;
+
+        foreach(self::$components as $className => $componentCode)
+        {
+            $finalCode = $componentCode;
+            if(in_array($componentCode, $fixed))
+                $finalCode = $componentCode . basename($className);
+
+            while(in_array($finalCode, $fixed))
+            {
+                $dupeCount++;
+                $finalCode = $componentCode . basename($className) . $dupeCount;
+            }
+
+            $fixed[$className] = $finalCode;
+        }
+
+        self::$components = $fixed;
+    }
+
+    /**
+     * Runs the initialize function on each module
+     */
+    private function initializeModules()
+    {
+        foreach(self::getModules() as $module)
+            $module->instance->initialize();
     }
 
     /**
@@ -151,7 +219,7 @@ abstract class UserExtended extends Module
      * @param $moduleName
      * @return bool|mixed
      */
-    public function getModule($moduleName)
+    public static function getModule($moduleName)
     {
         if(!array_key_exists($moduleName, self::$modules))
             return false;
@@ -165,7 +233,7 @@ abstract class UserExtended extends Module
      * @param $moduleName
      * @return bool
      */
-    public function isModuleLoaded($moduleName)
+    public static function isModuleLoaded($moduleName)
     {
         return array_key_exists($moduleName, self::$modules);
     }
@@ -177,7 +245,7 @@ abstract class UserExtended extends Module
      * @param $moduleName
      * @return bool
      */
-    public function getModuleVersion($moduleName)
+    public static function getModuleVersion($moduleName)
     {
         if(!array_key_exists($moduleName, self::$modules))
             return false;
@@ -185,6 +253,24 @@ abstract class UserExtended extends Module
         $module = self::$modules[$moduleName];
 
         return $module->version;
+    }
+
+    /**
+     * Returns all modules
+     * @return array
+     */
+    public static function getModules()
+    {
+        return self::$modules;
+    }
+
+    /**
+     * Dumps the contents of all the registered modules.
+     * This is useful for debugging
+     */
+    public static function dumpModules()
+    {
+        var_dump(self::$modules);
     }
 
 }

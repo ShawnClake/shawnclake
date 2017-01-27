@@ -22,6 +22,57 @@ class GroupManager extends StaticFactory
     private $groups;
 
     /**
+     * Creates a new group and returns it after saved
+     * @param $name
+     * @param $description
+     * @param $code
+     * @return GroupsExtended
+     */
+    public static function createGroup($name, $description, $code)
+    {
+        $group = new GroupsExtended;
+        $group->name = $name;
+        $group->description = $description;
+        $group->code = $code;
+        $group->save();
+        return $group;
+    }
+
+    /**
+     * Deletes a group
+     * TODO: Remove any UsersGroups associations with this group. The lines can be deleted entirely.
+     * TODO: Set roles which were a part of this group back to an 'unattached' state in userextended_roles table
+     * @param $groupCode
+     */
+    public static function deleteGroup($groupCode)
+    {
+        $group = GroupManager::findGroup($groupCode);
+
+        if(!isset($group))
+            return;
+
+        $group->delete();
+    }
+
+    /**
+     * Updates a group
+     * @param $groupCode
+     * @param null $name
+     * @param null $description
+     * @param null $code
+     */
+    public static function updateGroup($groupCode, $name = null, $description = null, $code = null)
+    {
+        $group = GroupManager::findGroup($groupCode);
+
+        if(isset($name)) $group->name = $name;
+        if(isset($description)) $group->description = $description;
+        if(isset($code)) $group->code = $code;
+
+        $group->save();
+    }
+
+    /**
      * @param $code
      * @deprecated Renamed to a better name below.
      * @return mixed

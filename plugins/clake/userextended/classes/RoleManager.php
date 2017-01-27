@@ -3,6 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\Roles;
 use October\Rain\Support\Collection;
 
 /**
@@ -25,6 +26,69 @@ class RoleManager extends StaticFactory
      * @var
      */
     private $roles;
+
+    /**
+     * Creates a role and returns it after saving
+     * @param $name
+     * @param $description
+     * @param $code
+     * @param int $groupId
+     * @return Roles
+     */
+    public static function createRole($name, $description, $code, $groupId = 0)
+    {
+        $role = new Roles();
+        $role->name = $name;
+        $role->description = $description;
+        $role->code = $code;
+        $role->group_id = $groupId;
+        return $role;
+    }
+
+    /**
+     * Deletes a role
+     * TODO: Reset the role_id in UsersGroups associations back to 0 where this role was used.
+     * @param $roleCode
+     */
+    public static function deleteRole($roleCode)
+    {
+        $role = RoleManager::findRole($roleCode);
+
+        if(!isset($role))
+            return;
+
+        $role->delete();
+    }
+
+    /**
+     * Updates a role
+     * @param $roleCode
+     * @param null $name
+     * @param null $description
+     * @param null $code
+     * @param null $groupId
+     */
+    public static function updateRole($roleCode, $name = null, $description = null, $code = null, $groupId = null)
+    {
+        $role = RoleManager::findRole($roleCode);
+
+        if(isset($name)) $role->name = $name;
+        if(isset($description)) $role->description = $description;
+        if(isset($code)) $role->code = $code;
+        if(isset($groupId)) $role->group_id = $groupId;
+
+        $role->save();
+    }
+
+    /**
+     * Finds and returns a role via RoleCode
+     * @param $roleCode
+     * @return mixed
+     */
+    public static function findRole($roleCode)
+    {
+        return Roles::where('code', $roleCode)->first();
+    }
 
     /**
      * Creating the class and filling it with the roles for the group specified.
