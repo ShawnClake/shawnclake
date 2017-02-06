@@ -3,18 +3,26 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\Role;
+use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
 
 /**
+ * User Extended by Shawn Clake
  * Class GroupManager
+ * User Extended is licensed under the MIT license.
  *
- * Handles all interaction accross groups on a global level rather than a user level.
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ *
+ * Handles all interaction across groups on a global level rather than a user level.
  * @method static GroupManager allGroups GroupManager
  * @package Clake\UserExtended\Classes
  */
 class GroupManager extends StaticFactory
 {
-
     /**
      * A collection of groups
      * @var
@@ -30,6 +38,9 @@ class GroupManager extends StaticFactory
      */
     public static function createGroup($name, $description, $code)
     {
+        if(GroupsExtended::code($code)->count() > 0)
+            return false;
+
         $group = new GroupsExtended;
         $group->name = $name;
         $group->description = $description;
@@ -40,18 +51,32 @@ class GroupManager extends StaticFactory
 
     /**
      * Deletes a group
-     * TODO: Remove any UsersGroups associations with this group. The lines can be deleted entirely.
-     * TODO: Set roles which were a part of this group back to an 'unattached' state in userextended_roles table
      * @param $groupCode
      */
     public static function deleteGroup($groupCode)
     {
         $group = GroupManager::findGroup($groupCode);
-
+        //echo json_encode($groupCode);
         if(!isset($group))
             return;
 
+        $roles = Role::rolesInGroup($groupCode)->get();
+
+        foreach($roles as $role)
+        {
+            RoleManager::updateRole($role->code, 1, null, null, null, 0, true);
+        }
+
+        $associations = UsersGroups::byGroup($groupCode)->get();
+
+        foreach($associations as $row)
+        {
+            $row->delete();
+        }
+
         $group->delete();
+
+        self::fixGroupSort();
     }
 
     /**
@@ -188,6 +213,40 @@ class GroupManager extends StaticFactory
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    /**
+     * Returns a set of groups sorted by sort order
+     * @return array
+     */
+    public static function getSortedGroups()
+    {
+        $groups = [];
+
+        foreach(self::allGroups()->getGroups() as $group)
+        {
+            $groups[$group["sort_order"]] = $group;
+        }
+
+        ksort($groups);
+
+        return $groups;
+    }
+
+    /**
+     * Fixes the group sort order
+     */
+    public static function fixGroupSort()
+    {
+        $groups = GroupManager::getSortedGroups();
+
+        $count = 0;
+        foreach($groups as $group)
+        {
+            $count++;
+            $group->sort_order = $count;
+            $group->save();
+        }
     }
 
 }

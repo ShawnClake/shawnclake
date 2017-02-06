@@ -3,13 +3,20 @@
 use Model;
 
 /**
- * TODO: Rename to UsersGroup to follow convention
- * TODO: Add scope functions to improve queryability
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class UsersGroups
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
+ * @method static UsersGroups byRole($roleCode) Query
+ * @method static UsersGroups byGroup($groupCode) Query
+ * @method static UsersGroups byUser($userId) Query
+ * @method static UsersGroups byUserWithoutRole($groupCode) Query
  */
 class UsersGroups extends Model
 {
@@ -49,6 +56,7 @@ class UsersGroups extends Model
     public $attachMany = [];
 
     /**
+     * Returns a role based upon the passed in roleCode
      * @param $query
      * @param $roleCode
      * @return mixed
@@ -80,6 +88,18 @@ class UsersGroups extends Model
     public function scopeByUser($query, $userId)
     {
         return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope a list of rows of users in a group but without an assigned role.
+     * @param $query
+     * @param $groupCode
+     * @return mixed
+     */
+    public function scopeByUsersWithoutRole($query, $groupCode)
+    {
+        $group = GroupsExtended::where('code', $groupCode)->first();
+        return $query->where('user_group_id', $group->id)->where('role_id', 0);
     }
 
     /**
@@ -117,6 +137,21 @@ class UsersGroups extends Model
         $row->save();
 
         return true;
+    }
+
+    /**
+     * Remove a user from a group
+     * @param $userObj
+     * @param $groupId
+     * @return bool
+     */
+    public static function removeUser($userObj, $groupId)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() == 0)
+            return false;
+
+        $relation = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
+        $relation->delete();
     }
 
 

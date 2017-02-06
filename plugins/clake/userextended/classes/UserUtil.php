@@ -1,26 +1,21 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Auth;
 use Carbon\Carbon;
-use Clake\Userextended\Models\Timezone;
 use Clake\Userextended\Models\UserExtended;
 use RainLab\User\Models\User;
 use Redirect;
 
 /**
- * TODO: Improve function documentation
- * TODO: Create a separate documentation file to document User Utility functions
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class UserUtil
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
- *
- * @todo: Move time related methods to a seperate trait
- * @todo: Test casting and timezones
- *
  */
 class UserUtil
 {
@@ -134,22 +129,38 @@ class UserUtil
 
     /**
      * Casts the Clake.UserExtended model to Rainlab.User
+     * Faster than converting, but less thorough
      * @param User $user
      * @return UserExtended
      */
-    public static function castToUserExtendedUser(User $user)
+    public static function castToUserExtendedUser($user)
     {
+        if($user == null)
+            return $user;
         $userExtended = new UserExtended();
         $userExtended->attributes = $user->attributes;
         return $userExtended;
     }
 
-    public static function convertToUserExtendedUser(User $user)
+    /**
+     * Convert a RainLab.User object to a UserExtended User object
+     * Slower than casting, but more thorough
+     * @param $user
+     * @return mixed
+     */
+    public static function convertToUserExtendedUser($user)
     {
+        if($user == null)
+            return $user;
         $id = $user->id;
         return UserExtended::where('id', $id)->first();
     }
 
+    /**
+     * Search for a user via the phrase
+     * @param $phrase
+     * @return mixed
+     */
     public static function searchUsers($phrase)
     {
         $results = new UserExtended();
@@ -201,6 +212,7 @@ class UserUtil
     }
 
     /**
+     * Gets the logged in user object and converts it to an UserExtended user object before returning it
      * @return mixed
      */
     public static function getLoggedInUserExtendedUser()

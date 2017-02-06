@@ -2,27 +2,25 @@
 
 use Model;
 use RainLab\User\Models\User;
-
 use Clake\UserExtended\Traits\Timezonable;
 use Clake\UserExtended\Traits\Searchable;
 
 /**
- * TODO: Add searchable functions here
- * TODO: Add searchable trait
- * TODO: Add scope functions for better user querying
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class UserExtended
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
  */
 class UserExtended extends User
 {
-
     use Timezonable;
 
     use Searchable;
-
 
     protected $timezonable = [
         'created_at',
