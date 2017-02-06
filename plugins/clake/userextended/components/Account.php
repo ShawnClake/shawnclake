@@ -17,10 +17,17 @@ use RainLab\User\Models\Settings;
 use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
-//use RainLab\User\Classes\AuthManager
+use Cms\Classes\Page;
 
 /**
+ * User Extended by Shawn Clake
  * Class Account
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Components
  *
  * Some code in this component has been copied from the RainLab.User plugin.
@@ -63,6 +70,15 @@ class Account extends ComponentBase
     }
 
     /**
+     * Used for properties dropdown menu
+     * @return mixed
+     */
+    public function getRedirectOptions()
+    {
+        return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    }
+
+    /**
      * Copied from the RainLab.Users Account component
      * Altered by Shawn Clake
      */
@@ -85,6 +101,8 @@ class Account extends ComponentBase
         $user->save();
 
         $settingsManager = UserSettingsManager::init();
+
+        Event::fire('clake.ue.settings.update', [&$settingsManager]);
 
         foreach($values as $key=>$value)
         {
@@ -125,11 +143,14 @@ class Account extends ComponentBase
              */
             $data = post();
 
+            $bob = Event::fire('clake.ue.preregistration', [&$data], true);
+                //return false;
+
             $rules = [
                 'email'    => 'required|email|between:6,255',
                 'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255'),
             ];
-
+            //echo json_encode($data);
             /*
              * Better utilization of email vs username
              */
@@ -152,6 +173,10 @@ class Account extends ComponentBase
             $requireActivation = Settings::get('require_activation', true);
             $automaticActivation = Settings::get('activate_mode') == Settings::ACTIVATE_AUTO;
             $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
+
+            /*
+             * Preform phase 1 User registration
+             */
             $user = $this->register($data, $automaticActivation);
 
             /*
@@ -169,7 +194,12 @@ class Account extends ComponentBase
 
             Auth::login($user);
 
+            /*
+             * Preform phase 2 User registration
+             */
             $settingsManager = UserSettingsManager::init();
+
+            Event::fire('clake.ue.settings.create', [&$settingsManager]);
 
             foreach($data as $key=>$value)
             {
@@ -183,16 +213,20 @@ class Account extends ComponentBase
             $settingsManager->save();
 
             /*
+             * Preform phase 3 User registration
              * Modified to swap to logout
              * Automatically activated or not required, log the user in
              */
             if (!$automaticActivation || $requireActivation) {
-                $user = UserUtil::getLoggedInUser();
+                $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
                 $user->last_login = null;
                 $user->last_seen = null;
+                Event::fire('clake.ue.postregistration', [&$user]);
                 $user->save();
                 Auth::logout();
             }
+
+
 
             /*
              * Redirect to the intended page after successful sign in
@@ -312,6 +346,8 @@ class Account extends ComponentBase
 
         $user = Auth::authenticate($credentials, true);
 
+        Event::fire('clake.ue.login', [$user]);
+
         /*
          * Redirect to the intended page after successful sign in
          */
@@ -337,6 +373,7 @@ class Account extends ComponentBase
 
         if ($user) {
             Event::fire('rainlab.user.logout', [$user]);
+            Event::fire('clake.ue.logout', [$user]);
         }
 
         $url = post('redirect', Request::fullUrl());
