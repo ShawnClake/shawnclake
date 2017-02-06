@@ -2,6 +2,7 @@
 
 use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
+
 use Model;
 use October\Rain\Support\Collection;
 
@@ -11,7 +12,6 @@ use Clake\UserExtended\Traits\Timezonable;
 //use October\Rain\Database\Traits\Encryptable
 
 use October\Rain\Database\Traits\SoftDelete;
-
 /**
  * TODO: Add scope functions to improve querying
  * TODO: Improve error checking for creating and updating roles
@@ -98,7 +98,7 @@ class Roles extends Model
      */
     public function beforeCreate()
     {
-        $this->sort_order = RoleManager::initGroupRolesByCode($this->group->code)->count() + 1;
+        $this->sort_order = RoleManager::for($this->group->code)->countRoles() + 1;
     }
 
     /**
@@ -107,7 +107,7 @@ class Roles extends Model
      */
     public function beforeUpdate()
     {
-        $total = RoleManager::initGroupRolesByCode($this->group->code)->count();
+        $total = RoleManager::for($this->group->code)->countRoles();
 
         if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
         {
@@ -121,13 +121,13 @@ class Roles extends Model
      */
     public function beforeDelete()
     {
-        $total = RoleManager::initGroupRolesByCode($this->group->code)->count();
+        $total = RoleManager::for($this->group->code)->countRoles();
         $myOrder = $this->sort_order;
 
         if($myOrder === $total)
             return true;
 
-        $roles = RoleManager::initGroupRolesByCode($this->group->code)->getGroupRolesByOrdering();
+        $roles = RoleManager::for($this->group->code)->getSortedGroupRoles();
 
         $difference = $total - $myOrder;
 
@@ -138,6 +138,22 @@ class Roles extends Model
             $role->save();
         }
 
+    }
+
+    /**
+     * Adds a role to a relational entry in UsersGroups
+     * @param $userObj
+     * @param $groupId
+     * @return bool
+     */
+    public static function addUser($userObj, $groupId, $roleId = 0)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() <= 0)
+            return false;
+
+        $row = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
+        $row->role_id = $roleId;
+        $row->save();
     }
 
 
