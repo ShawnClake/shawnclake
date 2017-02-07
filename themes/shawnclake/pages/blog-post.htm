@@ -1,0 +1,54 @@
+title = "Blog Post"
+url = "/blog/post/:slug"
+layout = "home"
+description = "The blog post page"
+is_hidden = 0
+
+[blogPost]
+slug = "{{ :slug }}"
+categoryPage = "blog-categories"
+==
+<div class="container">
+
+    <div class="row">
+    
+        <div class="col-sm-12 col-md-12">
+            
+            <div class="userblock" style="margin-bottom:10px;">
+            
+            
+                {% set post = blogPost.post %}
+                <h2 style="color:#63bf19;">{{post.title}}</h2>
+                <div class="content" style="font-size:17px;">{{ post.content_html|raw }}</div>
+                
+                {% if post.featured_images.count %}
+                    <div class="featured-images text-center">
+                        {% for image in post.featured_images %}
+                            <p>
+                                <img
+                                    data-src="{{ image.filename }}"
+                                    src="{{ image.path }}"
+                                    alt="{{ image.description }}"
+                                    style="max-width: 100%" />
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <p class="info" style="font-size:11px;font-style:italic;">
+                    Posted
+                    {% if post.categories.count %} in
+                        {% for category in post.categories %}
+                            <a href="{{ category.url }}">{{ category.name }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    on {{ post.published_at|date('M d, Y') }}
+                </p>
+            
+            
+            </div>
+
+            
+        </div>
+    </div>
+</div>

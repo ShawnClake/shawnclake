@@ -40,6 +40,29 @@ function onStart()
                 background-color: #e8f5e9;
             }
         </style>
+		
+		<style>
+
+    div.userblock
+    {
+        color:#000;
+        padding:15px;
+        margin-top:10px;
+    }
+
+    div.userblock:hover
+    {
+
+        background-color:rgba(0,0,0,0.1);
+
+    }
+    
+    div.post-font
+    {
+        font-family: verdana;
+        font-size:17px;
+    }
+</style>
         
         <!--<div class="container">
         {% component 'session' %}
@@ -60,13 +83,17 @@ function onStart()
        <a href="{{ 'index'|page }}" class="brand-logo">Shawn Clake</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-              <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Projects<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Projects<i class="material-icons right">arrow_drop_down</i></a></li>
+            <li><a href="http://shawnclake.com/portfolio">Portfolio</a></li>
+            <li><a href="http://shawnclake.com/blog">Blog</a></li>
             <li><a href="https://github.com/ShawnClake">Github</a></li>
             <li><a href="{{ 'dev'|page }}">Dev</a></li>  
             {% if user %}<li><a data-request="onLogout" data-request-data="redirect: '/'">Logout</a></li>{% endif %}
       </ul>
       <ul class="side-nav" id="mobile-demo">
               
+			<li><a href="http://shawnclake.com/portfolio">Portfolio</a></li>
+            <li><a href="http://shawnclake.com/blog">Blog</a></li>
             <li><a href="https://github.com/ShawnClake">Github</a></li>
             <li><a href="{{ 'dev'|page }}">Dev</a></li>  
             {% if user %}<li><a data-request="onLogout" data-request-data="redirect: '/'">Logout</a></li>{% endif %}

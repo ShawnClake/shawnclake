@@ -1,0 +1,54 @@
+title = "Blog Categories"
+url = "/blog/categories/:slug"
+layout = "home"
+description = "The blog categories page"
+is_hidden = 0
+
+[blogCategories]
+slug = "{{ :slug }}"
+displayEmpty = 0
+categoryPage = "blog-categories"
+==
+<div class="container">
+
+    <div class="row">
+    
+        <div class="col-sm-12 col-md-12">
+        
+            {% if blogCategories.categories %}
+            
+                <ul class="category-list">
+                <h4 style="margin-top:40px;">Categories</h4>
+                    {% set categories = blogCategories.categories %}
+                    {% set currentCategorySlug = blogCategories.currentCategorySlug %}
+                    
+                    {% for category in categories %}
+                        {% set postCount = category.post_count %}
+                        <div class="userblock post-font {% if category.slug == currentCategorySlug %}active{% endif %}">
+                            <a href="{{ category.url }}">{{ category.name }}</a> 
+                            {% if postCount %}
+                                <span class="badge">{{ postCount }}</span>
+                            {% endif %}
+                    
+                            {% if category.children %}
+                                <ul>
+                                    {% partial __SELF__ ~ "::items"
+                                        categories=category.children
+                                        currentCategorySlug=currentCategorySlug
+                                    %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+    
+    
+                </ul>
+                
+            {% endif %}
+    
+        
+        </div>
+    
+    </div>
+
+</div>

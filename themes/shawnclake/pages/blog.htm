@@ -1,0 +1,137 @@
+title = "Blog"
+url = "/blog/:page?"
+layout = "home"
+description = "The blog homepage"
+is_hidden = 0
+
+[blogPosts]
+pageNumber = "{{ :page }}"
+postsPerPage = 10
+noPostsMessage = "No posts found"
+sortOrder = "published_at desc"
+categoryPage = "blog-categories"
+postPage = "blog-post"
+
+[blogCategories]
+slug = "{{ :slug }}"
+displayEmpty = 0
+categoryPage = "blog-categories"
+==
+<style>
+
+    div.userblock
+    {
+        color:#000;
+        padding:15px;
+        margin-top:10px;
+    }
+
+    div.userblock:hover
+    {
+
+        background-color:rgba(0,0,0,0.1);
+
+    }
+    
+    div.post-font
+    {
+        font-family: verdana;
+        font-size:17px;
+    }
+</style>
+
+<div class="row">
+
+    <div class="col-sm-12 col-md-8">
+    
+    
+    
+    {% set posts = blogPosts.posts %}
+
+        <ul class="post-list">
+        <h4 style="margin-top:40px;">Recent</h4>
+            {% for post in posts %}
+            
+                <a href="{{ post.url }}" style="text-decoration:none;">
+                <div class="userblock post-font">
+                    <h2><span style="color:#63bf19;" >{{ post.title }}</span></h2>
+        
+                    <p class="info" style="font-style:italic;font-size:11px;">
+                        Posted
+                        {% if post.categories.count %} in {% endif %}
+                        {% for category in post.categories %}
+                            <a href="{{ category.url }}">{{ category.name }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                        on {{ post.published_at|date('M d, Y') }}
+                    </p>
+        
+                    <p class="excerpt">{{ post.summary }}</p>
+                </div>
+                </a>
+            {% else %}
+                <li class="no-data">{{ noPostsMessage }}</li>
+                
+                
+                
+            {% endfor %}
+        </ul>
+        
+        {% if posts.lastPage > 1 %}
+            <ul class="pagination">
+                {% if posts.currentPage > 1 %}
+                    <li><a href="{{ this.page.baseFileName|page({ (pageParam): (posts.currentPage-1) }) }}">&larr; Prev</a></li>
+                {% endif %}
+        
+                {% for page in 1..posts.lastPage %}
+                    <li class="{{ posts.currentPage == page ? 'active' : null }}">
+                        <a href="{{ this.page.baseFileName|page({ (pageParam): page }) }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if posts.lastPage > posts.currentPage %}
+                    <li><a href="{{ this.page.baseFileName|page({ (pageParam): (posts.currentPage+1) }) }}">Next &rarr;</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    
+    </div>
+    
+    <div class="col-sm-12 col-md-4">
+    
+        
+    
+        {% if blogCategories.categories %}
+        
+            <ul class="category-list">
+            <h4 style="margin-top:40px;">Categories</h4>
+                {% set categories = blogCategories.categories %}
+                {% set currentCategorySlug = blogCategories.currentCategorySlug %}
+                
+                {% for category in categories %}
+                    {% set postCount = category.post_count %}
+                    <div class="userblock post-font {% if category.slug == currentCategorySlug %}active{% endif %}">
+                        <a href="{{ category.url }}">{{ category.name }}</a> 
+                        {% if postCount %}
+                            <span class="badge">{{ postCount }}</span>
+                        {% endif %}
+                
+                        {% if category.children %}
+                            <ul>
+                                {% partial __SELF__ ~ "::items"
+                                    categories=category.children
+                                    currentCategorySlug=currentCategorySlug
+                                %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+
+            </ul>
+            
+        {% endif %}
+
+    
+    </div>
+
+</div>
