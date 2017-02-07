@@ -40,7 +40,9 @@ categoryPage = "blog-categories"
     }
 </style>
 
-<div class="row container">
+
+<div class="container">
+<div class="row">
 
     <div class="col s12 m8">
     
@@ -50,7 +52,7 @@ categoryPage = "blog-categories"
 
         <ul class="post-list">
         <h4 style="margin-top:40px;">Recent</h4>
-            {% for post in posts %}
+            {% for post in posts|reverse %}
             
                 <a href="{{ post.url }}" style="text-decoration:none;">
                 <div class="userblock post-font">
@@ -134,4 +136,5 @@ categoryPage = "blog-categories"
     
     </div>
 
+</div>
 </div>
