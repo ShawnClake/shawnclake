@@ -52,7 +52,7 @@ categoryPage = "blog-categories"
 
         <ul class="post-list">
         <h4 style="margin-top:40px;">Recent</h4>
-            {% for post in posts|reverse %}
+            {% for post in posts %}
             
                 <a href="{{ post.url }}" style="text-decoration:none;">
                 <div class="userblock post-font">
