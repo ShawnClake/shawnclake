@@ -1,21 +1,27 @@
-<?php
-
-namespace Clake\UserExtended\Traits;
+<?php namespace Clake\UserExtended\Traits;
 
 use Clake\DataStructures\Classes\Lists;
 use Exception;
 
 /**
- * TODO: Improve error checking and documentation
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class Searchable
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Traits
  */
 trait Searchable
 {
 
+    /**
+     * Loops through all the different fields to search by
+     * @param $phrase
+     * @return mixed
+     */
     public function search($phrase)
     {
         $searchable = $this->getSearchableAttributes();
@@ -30,6 +36,12 @@ trait Searchable
         return $results->allList();
     }
 
+    /**
+     * Preforms the actual search
+     * @param $field
+     * @param $phrase
+     * @return mixed
+     */
     protected static function searchUserByAttribute($field, $phrase)
     {
 

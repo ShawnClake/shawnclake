@@ -1,14 +1,17 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
-
-use Clake\UserExtended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
-use Clake\UserExtended\Plugin;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserRoleManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a user level
  *
@@ -156,6 +159,9 @@ class UserRoleManager extends StaticFactory
         if($roles == null)
             $roles = $this->userRoles;
 
+        if($roles == null)
+            return false;
+
         foreach($roles as $role)
         {
             if($roleCode == $role->code)
@@ -273,7 +279,9 @@ class UserRoleManager extends StaticFactory
 
         UserGroupManager::for($this->user)->addGroup($group->code);
 
-        return Roles::addUser($this->user, $group->id);
+        $roleId = RoleManager::findRole($roleCode)->id;
+
+        return Role::addUser($this->user, $group->id, $roleId);
     }
 
 }

@@ -64,3 +64,11 @@
 1.0.25:
     - Add user settings
     - user_add_settings.php
+1.1.00:
+    - User Extended Beta release. Check your project as many things are now Deprecated and rewritten.
+1.1.01:
+    - Creating role bug fix
+1.1.02:
+    - Fixed non-property error
+1.1.03:
+    - Fixed undefined offset error

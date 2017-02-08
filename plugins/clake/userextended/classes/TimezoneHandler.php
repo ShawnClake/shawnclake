@@ -1,19 +1,18 @@
-<?php
-
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Carbon\Carbon;
 use Clake\Userextended\Models\Timezone;
 use Clake\Userextended\Models\UserExtended;
 
 /**
- * TODO: Add alias naming functions
- * TODO: Add a documentation page for how to use Timezones
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class TimezoneHandler
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  */
 class TimezoneHandler

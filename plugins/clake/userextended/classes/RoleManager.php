@@ -3,11 +3,18 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use October\Rain\Support\Collection;
 
 /**
+ * User Extended by Shawn Clake
  * Class RoleManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a group level (Global level)
  * @method static RoleManager for($groupCode) RoleManager
@@ -28,6 +35,15 @@ class RoleManager extends StaticFactory
     private $roles;
 
     /**
+     * Returns a list of roles not currently related to a group.
+     * @return mixed
+     */
+    public static function getUnassignedRoles()
+    {
+        return Role::where('group_id', 0)->get();
+    }
+
+    /**
      * Creates a role and returns it after saving
      * @param $name
      * @param $description
@@ -37,11 +53,12 @@ class RoleManager extends StaticFactory
      */
     public static function createRole($name, $description, $code, $groupId = 0)
     {
-        $role = new Roles();
+        $role = new Role();
         $role->name = $name;
         $role->description = $description;
         $role->code = $code;
         $role->group_id = $groupId;
+        $role->save();
         return $role;
     }
 
@@ -63,21 +80,25 @@ class RoleManager extends StaticFactory
     /**
      * Updates a role
      * @param $roleCode
+     * @param null $sortOrder
      * @param null $name
      * @param null $description
      * @param null $code
      * @param null $groupId
      */
-    public static function updateRole($roleCode, $name = null, $description = null, $code = null, $groupId = null)
+    public static function updateRole($roleCode, $sortOrder = null, $name = null, $description = null, $code = null, $groupId = null, $ignoreChecks = false)
     {
         $role = RoleManager::findRole($roleCode);
 
+        if(isset($sortOrder)) $role->sort_order = $sortOrder;
         if(isset($name)) $role->name = $name;
         if(isset($description)) $role->description = $description;
         if(isset($code)) $role->code = $code;
         if(isset($groupId)) $role->group_id = $groupId;
 
+        $role->ignoreChecks = $ignoreChecks;
         $role->save();
+        $role->ignoreChecks = false;
     }
 
     /**
@@ -87,7 +108,7 @@ class RoleManager extends StaticFactory
      */
     public static function findRole($roleCode)
     {
-        return Roles::where('code', $roleCode)->first();
+        return Role::where('code', $roleCode)->first();
     }
 
     /**
@@ -333,6 +354,23 @@ class RoleManager extends StaticFactory
         ksort($groupRoles);
 
         return $groupRoles;
+    }
+
+    /**
+     * Fixes the role sort order
+     */
+    public function fixRoleSort()
+    {
+        $roles = RoleManager::for($this->group->code)->getSortedGroupRoles();
+
+        $count = 0;
+        foreach($roles as $role)
+        {
+            $count++;
+            $role->sort_order = $count;
+            $role->save();
+        }
+
     }
 
 }
